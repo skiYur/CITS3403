@@ -15,7 +15,7 @@ instructions for how to run the tests for the application.
 # Members 
 
 | UWA Student Number | Name | Github User Name |
-| :---               |     :---:      |          ---: |
+| :---:               |     :---:      |     :---:     |
 | 23482415           | Shashwat Abrol | skiYur        |
 |                    |                |               |
 |                    |                |               |
