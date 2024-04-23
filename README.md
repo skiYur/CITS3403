@@ -16,8 +16,8 @@ instructions for how to run the tests for the application.
 
 | UWA Student Number | Name | Github User Name |
 | :---:               |     :---:      |     :---:     |
-| 23482415           | Shashwat Abrol | skiYur        |
-|                    |                |               |
+| 23482415           | Shashwat Abrol    | skiYur      |
+| 23416986           | Ben Samson Daniel | Lockdauun |
 |                    |                |               |
 |                    |                |               |
 
