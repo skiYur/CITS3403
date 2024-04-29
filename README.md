@@ -18,7 +18,5 @@ instructions for how to run the tests for the application.
 | :---:               |     :---:      |     :---:     |
 | 23482415           | Shashwat Abrol    | skiYur      |
 | 23416986           | Ben Samson Daniel | Lockdauun |
+| 23335344           | Matei Hepcal      |       mateihepcal24        |
 |                    |                |               |
-|                    |                |               |
-
-
