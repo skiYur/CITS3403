@@ -1,9 +1,16 @@
 #from app import create_app()
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return "<h1> TEST </h1>"
-    #return render_template('Project.html')
+    return render_template('home.html')
+
+@routes.route('/trending')
+def trending():
+    return render_template('trending.html')
+
+@routes.route('/mocktails')
+def mocktails():
+    return render_template('mocktails.html')
