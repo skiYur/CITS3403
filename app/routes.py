@@ -1,6 +1,9 @@
-from app import app
-from flask import render_template
+#from app import create_app()
+from flask import Blueprint
 
-@app.route('/')
-def index():
-    return render_template('Project.html')
+routes = Blueprint('routes', __name__)
+
+@routes.route('/')
+def home():
+    return "<h1> TEST </h1>"
+    #return render_template('Project.html')
