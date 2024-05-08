@@ -1,7 +1,17 @@
 {% extends "base.html" %}{% block title %}Login{% endblock %}
+
 {% block content %}
-<form method ="POST">
-    <h2 class = "text-center">Login to your account!</h2>
+<h2 class = "text-center">Login to your account!</h2>
+{% with messages = get_flashed_messages(with_categories=True) %}
+                        {% if messages %}
+                            <div class="container">
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+<form action="/login" method="post">
     
         <div class="d-flex flex-column">
         <label for="email">Email</label>
