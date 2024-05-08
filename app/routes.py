@@ -1,16 +1,67 @@
-#from app import create_app()
-from flask import Blueprint, render_template
+from flask import render_template, redirect, request, url_for, flash, session
+from app import app
+from app.models import db, User
 
-routes = Blueprint('routes', __name__)
-
-@routes.route('/')
+@app.route('/')
 def home():
-    return render_template('home.html')
+    return redirect(url_for('login'))
 
-@routes.route('/trending')
-def trending():
-    return render_template('trending.html')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        identifier = request.form['username']  # Can be either username or email
+        password = request.form['password']
 
-@routes.route('/mocktails')
-def mocktails():
-    return render_template('mocktails.html')
+        user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
+
+        if user:
+            if user.check_password(password):
+                session['username'] = user.username
+                flash('Login successful', 'success')
+                return redirect(url_for('dashboard'))
+            else:
+                flash('Incorrect password', 'danger')
+        else:
+            flash('Invalid username or email', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'username' in session:
+        return f"Hello, {session['username']}!"
+    else:
+        flash('Please log in to access this page', 'danger')
+        return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm-password']
+
+        if password != confirm_password:
+            flash('Passwords do not match', 'danger')
+            return redirect(url_for('sign_up'))
+
+        user = User(username=username, email=email)
+        user.set_password(password)
+
+        try:
+            db.session.add(user)
+            db.session.commit()
+            flash('Registration successful', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(f'Error: {str(e)}', 'danger')
+            return redirect(url_for('sign_up'))
+
+    return render_template('signup.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    flash('You have been logged out', 'success')
+    return redirect(url_for('login'))
