@@ -1,6 +1,6 @@
 # verify_user.py
 from app import app
-from app.models import db, User
+from app.models import User
 
 with app.app_context():
     users = User.query.all()
