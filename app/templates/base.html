@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.cs">
 
@@ -17,11 +17,18 @@
             </button>
             <div class = "collapse navbar-collapse" id="navbar"> 
                 <div class = "navbar-nav">
+                    <!-- look to make the logo a clickable link to home page and then remove home from navbar -->
+                    <!-- <a class="navbar-brand" href="/">
+                        <div class="logo-image">
+                            <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Drinks Reviews Logo" class="image-fluid">
+                        </div>
+                  </a> -->
                     <a class="nav-item nav-link" id ="home" href="/">Home</a>
                     <a class="nav-item nav-link" id ="trending" href="/trending">Trending</a>
                     <a class="nav-item nav-link" id ="mocktails" href="/mocktails">Mocktails</a>
                     <a class="nav-item nav-link" id ="login" href="/login">Login</a>
-                    <a class="nav-item nav-link" id ="signUp" href="/sign-up">Sign Up</a>
+                    <!-- make sign up only visible from login page? -->
+                    <!-- <a class="nav-item nav-link" id ="signUp" href="/sign-up">Sign Up</a> -->
                     <a class="nav-item nav-link" id ="logout" href="/logout">Logout</a>
                 </div>
             </div> 
