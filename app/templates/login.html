@@ -3,6 +3,21 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Drink Reviews</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
+</head>
+<div class="loginpage-container" style="margin-top: 50px;">
+<div class= "Welcome-container" style = "text-align:center" style="margin-top: 100px;" >
+    <h1>Welcome to Drinks Reviews</h1>
+    <p>Find and share drink reviews with a community that loves drinks as much as you do!</p>
+</div>
+
+<div class="login-container" style="margin-top: 40px;">
     <h2 class="text-center">Login to your account!</h2>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -11,6 +26,7 @@
                     <div class="alert alert-{{ category }}">{{ message }}</div>
                 {% endfor %}
             </div>
+</div>
         {% endif %}
     {% endwith %}
     <form action="/login" method="post">
@@ -23,12 +39,12 @@
             <input type="password" class="form-control mb-3" id="password" name="password" placeholder="Enter Password" required>
         </div>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary mb-2" style="width: 90px; height: 40px;">Login</button> 
-            <br />
+            <button type="submit" class="btn btn-primary mb-2" style="width: 100%; height: 40px;">Login</button>            <br />
             <a href="/forgot-password" class="highlight-link">Forgot Password?</a>
             <br />
             <hr />
             <p>Don't have an account? <a id="signUp" href="/sign-up">Sign up here</a></p>
         </div>
+    </div>
     </form>
 {% endblock %}

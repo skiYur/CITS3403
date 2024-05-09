@@ -1,3 +1,4 @@
+/* Global settings */
 html, body {
     width: 100%;
     height: 100%;
@@ -5,12 +6,21 @@ html, body {
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scrolling */
     font-family: Arial, sans-serif;
+    background-color: #a5e1e1; /* Set teal background globally */
 }
 
+/* Navigation bar settings */
+.navbar-nav {
+    background-color: #FFFFFF;
+}
+
+/* Content settings */
 .container-fluid {
+    background-color: #004885;
     width: 100vw;
-    height: 100vh; /* Full viewport height */
+    height: calc(100vh - 50px); /* Adjust height assuming nav bar is 50px */
     display: flex;
+    flex-direction: row;
     flex-wrap: nowrap; /* Prevents flex items from wrapping */
     margin: 0;
     padding: 0;
@@ -24,30 +34,10 @@ html, body {
     margin: 0;
 }
 
-.bg-teal {
-    background-color: #0d6363;
-    flex: 1; /* Ensures it fills half of the container */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px; /* Padding for spacing */
-    color: white;
-}
-
-.bg-blue {
-    background-color: #a5e1e1;
-    flex: 1; /* Ensures it fills half of the container */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px; /* Padding for spacing */
-}
-
 .col-md-6 {
     width: 50%; /* Explicit width for medium screens */
     flex: 1 0 auto; /* Flexibility in sizing */
+    padding: 20px; /* Padding for spacing */
 }
 
 input, .btn {
@@ -58,7 +48,7 @@ input, .btn {
 }
 
 .btn-primary {
-    background-color: #004885;
+    background-color: #004885; /* Button color can be adjusted if needed */
     color: white;
     border: none;
     font-weight: bold;
@@ -76,11 +66,3 @@ input, .btn {
         flex: 0 0 100%;
     }
 }
-
-/* .logo-image{
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-top: -6px;
-} */
