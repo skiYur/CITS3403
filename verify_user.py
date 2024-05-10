@@ -1,6 +1,8 @@
-# verify_user.py
-from app import app
+from app import create_app, db
 from app.models import User
+
+# Create the app instance
+app = create_app()
 
 with app.app_context():
     users = User.query.all()

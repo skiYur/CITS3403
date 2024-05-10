@@ -21,7 +21,7 @@ def login():
             if user.check_password(password):
                 session['username'] = user.username
                 flash('Login successful', category='success')
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('routes.dashboard'))  # Corrected endpoint
             else:
                 flash('Incorrect password', category='danger')
         else:
@@ -45,20 +45,30 @@ def sign_up():
         password = request.form['password1']
         confirm_password = request.form['password2']
 
+        # Check if passwords match
         if password != confirm_password:
-            flash('Passwords do not match',category= 'danger')
-            return redirect(url_for('auth.sign_up'))
-        else:
-            user = User(username=username, email=email, password_hash=generate_password_hash('password1'))
-            # user.set_password(password)
-        # try:
+            flash('Passwords do not match', category='danger')
+            return redirect(url_for('routes.sign_up'))
+
+        # Check if username or email already exists
+        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+        if existing_user:
+            flash('Username or email already exists', category='danger')
+            return redirect(url_for('routes.sign_up'))
+
+        # Create new user
+        user = User(username=username, email=email)
+        user.set_password(password)
+
+        # Commit the new user to the database
+        try:
             db.session.add(user)
             db.session.commit()
             flash('Registration successful', category='success')
-            return redirect(url_for('auth.login'))
-        # except Exception as e:
-        #     flash(f'Error: {str(e)}', category='danger')
-        #     return redirect(url_for('sign_up'))
+            return redirect(url_for('routes.login'))
+        except Exception as e:
+            flash(f'Error: {str(e)}', category='danger')
+            return redirect(url_for('routes.sign_up'))
 
     return render_template('sign_up.html')
 
