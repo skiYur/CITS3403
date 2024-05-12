@@ -7,7 +7,8 @@ routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return redirect(url_for('auth.login'))
+    return render_template('homepage.html')
+    #return redirect(url_for('auth.login'))
 
 @routes.route('/login', methods=['GET', 'POST'])
 def login():

@@ -1,0 +1,60 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Consistent background color */
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #004d4d; /* Teal color for the sidebar */
+    color: white;
+    padding: 15px; /* More refined padding */
+}
+
+.category-list .list-group-item {
+    background-color: transparent;
+    color: white;
+    padding: 10px 15px; /* More consistent padding */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners for modern look */
+}
+
+.category-list .list-group-item:hover {
+    background-color: #006666; /* Slightly different teal on hover for better feedback */
+}
+
+/* Main content area styling */
+.content-area {
+    padding: 20px;
+    background-color: #ffffff; /* Ensure background color for content area */
+    border-left: 2px solid #ccc; /* Subtle border to separate from sidebar */
+}
+
+/* Engagement card styling */
+.engagement-card {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 20px; /* Spacing from top */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Stronger shadow for depth */
+}
+
+textarea {
+    width: 100%;
+    height: 100px; /* Fixed height */
+    resize: none; /* Disable resizing */
+    padding: 10px; /* Inner padding for text area */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for inset effect */
+    border: 1px solid #ccc; /* Subtle border */
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 10px 0; /* Adequate padding for better click area */
+    background-color: #007bff; /* Primary blue */
+    border-color: #007bff; /* Match border color */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker on hover */
+    border-color: #0056b3; /* Border color darker on hover */
+}
