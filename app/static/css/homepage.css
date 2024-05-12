@@ -1,0 +1,40 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.sidebar {
+    background-color: #0d6363; /* Teal color for the sidebar */
+    color: white;
+    padding: 20px;
+}
+
+.category-list .list-group-item {
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.category-list .list-group-item:hover {
+    background-color: #004d4d; /* Darker teal for hover */
+}
+
+.content-area {
+    padding: 20px;
+}
+
+.engagement-card {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+textarea {
+    width: 100%;
+    resize: none;
+}
+
+.btn-primary {
+    width: 100%;
+}

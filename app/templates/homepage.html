@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar: Categories -->
+        <div class="col-md-2 sidebar">
+            <div class="category-list">
+                <a href="#" class="list-group-item bg-teal" onclick="loadCategory('Cocktails');">Cocktails</a>
+                <a href="#" class="list-group-item bg-teal" onclick="loadCategory('Mocktails');">Mocktails</a>
+                <a href="#" class="list-group-item bg-teal" onclick="loadCategory('Wine');">Wine</a>
+                <a href="#" class="list-group-item bg-teal" onclick="loadCategory('Beer');">Beer</a>
+                <a href="#" class="list-group-item bg-teal" onclick="loadCategory('Spirits');">Spirits</a>
+            </div>
+        </div>
+        
+        <!-- Main content: Dynamic posts -->
+        <div class="col-md-7 content-area">
+            <h1>Welcome to Mix'd Opinions</h1>
+            <p>Select a category to view posts or join discussions!</p>
+        </div>
+
+        <!-- Right Sidebar: Engagement & Related Topics -->
+        <div class="col-md-3">
+            <div class="engagement-card p-3">
+                <textarea class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
+                <button class="btn btn-primary mt-2" onclick="postComment();">Post</button>
+            </div>
+            <div id="live-updates" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
