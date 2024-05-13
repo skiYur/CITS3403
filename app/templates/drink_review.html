@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Drink Review{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Drink Review Form -->
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Add a {{ drink_type }} Review</h1>
+            <form id="drink-review-form">
+                <div class="form-group">
+                    <label for="drink-name">Drink Name:</label>
+                    <input type="text" class="form-control" id="drink-name" name="drinkName" required>
+                </div>
+                <div class="form-group">
+                    <label for="instructions">Instructions:</label>
+                    <textarea class="form-control" rows="3" id="instructions" name="instructions"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="ingredients">Ingredients:</label>
+                    <textarea class="form-control" rows="3" id="ingredients" name="ingredients"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="review">Review:</label>
+                    <textarea class="form-control" rows="3" id="review" name="review" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating:</label><br>
+                    <div id="rating-stars">
+                        <i class="star far fa-star" data-value="1"></i>
+                        <i class="star far fa-star" data-value="2"></i>
+                        <i class="star far fa-star" data-value="3"></i>
+                        <i class="star far fa-star" data-value="4"></i>
+                        <i class="star far fa-star" data-value="5"></i>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" value="0">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Display Drink Reviews -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Recent Drink Reviews</h2>
+            <div id="drink-reviews">
+                <!-- Drink reviews will be displayed here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to handle form submission, display reviews, and star rating -->
+<script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>
+{% endblock %}

@@ -22,7 +22,7 @@ def login():
             if user.check_password(password):
                 session['username'] = user.username
                 flash('Login successful', category='success')
-                return redirect(url_for('routes.dashboard'))  # Corrected endpoint
+                return redirect(url_for('routes.home'))  # Change here from 'routes.dashboard' to 'routes.home'
             else:
                 flash('Incorrect password', category='danger')
         else:
@@ -78,3 +78,36 @@ def logout():
     session.pop('username', None)
     flash('You have been logged out', category='success')
     return redirect(url_for('auth.login'))
+
+
+@routes.route('/vodka')
+def vodka():
+    return render_template('drink_review.html', drink_type='Vodka')
+
+@routes.route('/whisky')
+def whisky():
+    return render_template('drink_review.html', drink_type='Whisky/Whiskey')
+
+@routes.route('/gin')
+def gin():
+    return render_template('drink_review.html', drink_type='Gin')
+
+@routes.route('/rum')
+def rum():
+    return render_template('drink_review.html', drink_type='Rum')
+
+@routes.route('/tequila')
+def tequila():
+    return render_template('drink_review.html', drink_type='Tequila')
+
+@routes.route('/liqueur')
+def liqueur():
+    return render_template('drink_review.html', drink_type='Liqueur')
+
+@routes.route('/other')
+def other():
+    return render_template('drink_review.html', drink_type='Other')
+
+@routes.route('/nonalcoholic')
+def nonalcoholic():
+    return render_template('drink_review.html', drink_type='Non-alcoholic')
