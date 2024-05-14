@@ -7,7 +7,7 @@ routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return render_template('homepage.html')
+    return render_template('leaderboard.html')
     #return redirect(url_for('auth.login'))
 
 @routes.route('/login', methods=['GET', 'POST'])
@@ -111,3 +111,10 @@ def other():
 @routes.route('/nonalcoholic')
 def nonalcoholic():
     return render_template('drink_review.html', drink_type='Non-alcoholic')
+
+@routes.route('/api/leaderboard')
+def api_leaderboard():
+    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
+    return jsonify([
+        {"username": user.username, "postsCount": user.posts.count()} for user in users
+    ])
