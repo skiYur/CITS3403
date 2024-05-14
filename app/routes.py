@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash, session
-from .models import User
+from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify
+from .models import User, Post
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -7,79 +7,67 @@ routes = Blueprint('routes', __name__)
 
 @routes.route('/')
 def home():
-    return render_template('leaderboard.html')
-    #return redirect(url_for('auth.login'))
+    if 'username' in session:
+        return render_template('homepage.html')
+    else:
+        # Redirect to login if not logged in
+        return redirect(url_for('routes.login'))
 
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        identifier = request.form['email']  # Can be either username or email
-        password = request.form['password']
+        identifier = request.form.get('email')  
+        password = request.form.get('password')
 
         user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
-
-        if user:
-            if user.check_password(password):
-                session['username'] = user.username
-                flash('Login successful', category='success')
-                return redirect(url_for('routes.home'))  # Change here from 'routes.dashboard' to 'routes.home'
-            else:
-                flash('Incorrect password', category='danger')
+        if user and user.check_password(password):
+            session['username'] = user.username
+            flash('Login successful', category='success')
+            return redirect(url_for('routes.home'))
         else:
-            flash('Invalid username or email', category='danger')
+            flash('Invalid login credentials', category='danger')
 
     return render_template('login.html')
-
-@routes.route('/dashboard')
-def dashboard():
-    if 'username' in session:
-        return f"Hello, {session['username']}!"
-    else:
-        flash('Please log in to access this page', category='danger')
-        return redirect(url_for('auth.login'))
-
-@routes.route('/register', methods=['GET', 'POST'])
-def sign_up():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password1']
-        confirm_password = request.form['password2']
-
-        # Check if passwords match
-        if password != confirm_password:
-            flash('Passwords do not match', category='danger')
-            return redirect(url_for('routes.sign_up'))
-
-        # Check if username or email already exists
-        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
-        if existing_user:
-            flash('Username or email already exists', category='danger')
-            return redirect(url_for('routes.sign_up'))
-
-        # Create new user
-        user = User(username=username, email=email)
-        user.set_password(password)
-
-        # Commit the new user to the database
-        try:
-            db.session.add(user)
-            db.session.commit()
-            flash('Registration successful', category='success')
-            return redirect(url_for('routes.login'))
-        except Exception as e:
-            flash(f'Error: {str(e)}', category='danger')
-            return redirect(url_for('routes.sign_up'))
-
-    return render_template('sign_up.html')
 
 @routes.route('/logout')
 def logout():
     session.pop('username', None)
     flash('You have been logged out', category='success')
-    return redirect(url_for('auth.login'))
+    return redirect(url_for('routes.login'))
 
+@routes.route('/register', methods=['GET', 'POST'])
+def sign_up():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password1')
+        confirm_password = request.form.get('password2')
 
+        if password != confirm_password:
+            flash('Passwords do not match', category='danger')
+            return redirect(url_for('routes.sign_up'))
+
+        if User.query.filter((User.username == username) | (User.email == email)).first():
+            flash('Username or email already exists', category='danger')
+            return redirect(url_for('routes.sign_up'))
+
+        user = User(username=username, email=email)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        flash('Registration successful', category='success')
+        return redirect(url_for('routes.login'))
+
+    return render_template('sign_up.html')
+
+@routes.route('/api/leaderboard')
+def api_leaderboard():
+    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
+    return jsonify([
+        {"username": user.username, "postsCount": user.posts.count()} for user in users
+    ])
+
+# Add routes for specific drink categories
 @routes.route('/vodka')
 def vodka():
     return render_template('drink_review.html', drink_type='Vodka')
@@ -112,9 +100,6 @@ def other():
 def nonalcoholic():
     return render_template('drink_review.html', drink_type='Non-alcoholic')
 
-@routes.route('/api/leaderboard')
-def api_leaderboard():
-    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
-    return jsonify([
-        {"username": user.username, "postsCount": user.posts.count()} for user in users
-    ])
+@routes.route('/leaderboard')
+def leaderboard():
+    return render_template('leaderboard.html')
