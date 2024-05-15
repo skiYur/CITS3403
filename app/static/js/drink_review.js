@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+
+
+
+
     form.addEventListener("submit", function(event) {
         event.preventDefault();
         const formData = new FormData(this);
@@ -41,4 +45,27 @@ document.addEventListener("DOMContentLoaded", function() {
             alert("Error submitting the review.");
         });
     });
+
+
+
+    function deleteReview(reviewId) {
+        if (confirm('Are you sure you want to delete this review?')) {
+            fetch(`/delete_review/${reviewId}`, {
+                method: 'DELETE'
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert('Review deleted successfully');
+                      window.location.reload();
+                  } else {
+                      alert('Failed to delete review. Please try again.');
+                  }
+              }).catch(error => {
+                  console.error('Error deleting review:', error);
+                  alert('Error deleting the review.');
+              });
+        }
+    }
+    
+    
 });

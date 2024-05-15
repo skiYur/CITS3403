@@ -36,6 +36,7 @@ def login():
         user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
         if user and user.check_password(password):
             session['username'] = user.username
+            session['user_id'] = user.id
             flash('Login successful', category='success')
             print(f"DEBUG: Login successful for user: {user.username}")  # Debug statement
             return redirect(url_for('routes.home'))
@@ -174,3 +175,19 @@ def submit_review(drink_type):
 
     flash('Review submitted successfully!', category='success')
     return redirect(url_for('routes.' + drink_type.lower()))  # Ensure this redirection is to a valid endpoint
+
+@routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
+@login_required
+def delete_review(review_id):
+    review = Post.query.get(review_id)
+    if review and review.user_id == session['user_id']:
+        db.session.delete(review)
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 403  # Forbidden or not found
+
+@routes.route('/api/login_status')
+def login_status():
+    is_logged_in = 'username' in session
+    return jsonify(isLoggedIn=is_logged_in)
