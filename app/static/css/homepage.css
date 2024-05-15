@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Consistent background color */
+    background-color: #f4f4f4; /*consistent background color */
 }
 
 /* Sidebar styling */
@@ -57,4 +57,63 @@ textarea {
 .btn-primary:hover {
     background-color: #0056b3; /* Darker on hover */
     border-color: #0056b3; /* Border color darker on hover */
+}
+
+/* New styles for the banner and avatar */
+.container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.banner {
+    position: relative;
+    width: 100%;
+    height: 200px; /* Fixed height */
+    overflow: visible; /* Changed to visible to allow avatar to overlap */
+    margin-bottom: 20px; /* Reduced margin to adjust for avatar overlap */
+    background-color: #cccccc; /* Placeholder background color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the banner area */
+}
+
+.avatar-wrapper {
+    position: absolute;
+    bottom: 0; /* Positioned at the bottom of the banner */
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* Changed to circle shape */
+    overflow: hidden;
+    border: 3px solid white; /* Border to make it stand out */
+    background-color: #666666; /* Placeholder background color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 10; /* Increased z-index to ensure it is on top */
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the avatar area */
+}
+
+.user-info {
+    margin-top: 60px; /* Adjusted margin to clear space below the avatar */
+    text-align: center;
 }

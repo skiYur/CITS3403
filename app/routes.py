@@ -10,7 +10,14 @@ routes = Blueprint('routes', __name__)
 @routes.route('/')
 def home():
     if 'username' in session:
-        return render_template('homepage.html')
+        user = User.query.filter_by(username=session['username']).first()
+        if user:
+            print(f"DEBUG: User found: {user.username}")  # Debug statement
+            return render_template('homepage.html', username=user.username)
+        else:
+            # Handle case where user is not found in the database
+            flash('User not found', category='danger')
+            return redirect(url_for('routes.login'))
     else:
         # Redirect to login if not logged in
         return redirect(url_for('routes.login'))
@@ -25,9 +32,11 @@ def login():
         if user and user.check_password(password):
             session['username'] = user.username
             flash('Login successful', category='success')
+            print(f"DEBUG: Login successful for user: {user.username}")  # Debug statement
             return redirect(url_for('routes.home'))
         else:
             flash('Invalid login credentials', category='danger')
+            print("DEBUG: Invalid login credentials")  # Debug statement
 
     return render_template('login.html')
 
@@ -35,6 +44,7 @@ def login():
 def logout():
     session.pop('username', None)
     flash('You have been logged out', category='success')
+    print("DEBUG: User logged out")  # Debug statement
     return redirect(url_for('routes.login'))
 
 @routes.route('/register', methods=['GET', 'POST'])
@@ -58,6 +68,7 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
         flash('Registration successful', category='success')
+        print(f"DEBUG: Registration successful for user: {user.username}")  # Debug statement
         return redirect(url_for('routes.login'))
 
     return render_template('sign_up.html')
