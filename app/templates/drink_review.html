@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink-review-form">
+            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
                     <input type="text" class="form-control" id="drink-name" name="drinkName" required>
@@ -46,11 +46,15 @@
         <div class="col-md-12">
             <h2>Recent Drink Reviews</h2>
             <div id="drink-reviews">
-                <!-- Drink reviews will be displayed here -->
+                {% for review in reviews %}
+                <div class="review">
+                    <p>{{ review.content }}</p>
+                    <small>Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
-</div>
 
 <!-- JavaScript to handle form submission, display reviews, and star rating -->
 <script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>

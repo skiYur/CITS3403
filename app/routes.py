@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash,
 from .models import User, Post
 from . import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+
 
 routes = Blueprint('routes', __name__)
 
@@ -70,36 +72,70 @@ def api_leaderboard():
 # Add routes for specific drink categories
 @routes.route('/vodka')
 def vodka():
-    return render_template('drink_review.html', drink_type='Vodka')
+    recent_reviews = Post.query.filter_by(drink_type='vodka').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Vodka', reviews=recent_reviews)
 
 @routes.route('/whisky')
 def whisky():
-    return render_template('drink_review.html', drink_type='Whisky/Whiskey')
+    recent_reviews = Post.query.filter_by(drink_type='whisky').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Whisky/Whiskey', reviews=recent_reviews)
 
 @routes.route('/gin')
 def gin():
-    return render_template('drink_review.html', drink_type='Gin')
+    recent_reviews = Post.query.filter_by(drink_type='gin').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Gin', reviews=recent_reviews)
 
 @routes.route('/rum')
 def rum():
-    return render_template('drink_review.html', drink_type='Rum')
+    recent_reviews = Post.query.filter_by(drink_type='rum').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Rum', reviews=recent_reviews)
 
 @routes.route('/tequila')
 def tequila():
-    return render_template('drink_review.html', drink_type='Tequila')
+    recent_reviews = Post.query.filter_by(drink_type='tequila').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Tequila', reviews=recent_reviews)
 
 @routes.route('/liqueur')
 def liqueur():
-    return render_template('drink_review.html', drink_type='Liqueur')
+    recent_reviews = Post.query.filter_by(drink_type='liqueur').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Liqueur', reviews=recent_reviews)
 
 @routes.route('/other')
 def other():
-    return render_template('drink_review.html', drink_type='Other')
+    recent_reviews = Post.query.filter_by(drink_type='other').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Other', reviews=recent_reviews)
 
 @routes.route('/nonalcoholic')
 def nonalcoholic():
-    return render_template('drink_review.html', drink_type='Non-alcoholic')
+    recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
+    return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
 
 @routes.route('/leaderboard')
 def leaderboard():
     return render_template('leaderboard.html')
+
+
+@routes.route('/submit_review/<drink_type>', methods=['POST'])
+def submit_review(drink_type):
+    if 'username' not in session:
+        flash('You must be logged in to submit reviews', category='error')
+        return redirect(url_for('routes.login'))
+
+    drink_name = request.form.get('drinkName')
+    instructions = request.form.get('instructions')
+    ingredients = request.form.get('ingredients')
+    review_text = request.form.get('review')
+    rating = request.form.get('rating')
+
+    user = User.query.filter_by(username=session['username']).first()
+    if not user:
+        flash('User not found', category='error')
+        return redirect(url_for('routes.login'))
+
+    content = f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}"
+    new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower(), created_at=datetime.utcnow())
+    db.session.add(new_post)
+    db.session.commit()
+
+    flash('Review submitted successfully!', category='success')
+    return redirect(url_for('routes.' + drink_type.lower()))  # Ensure this redirection is to a valid endpoint
