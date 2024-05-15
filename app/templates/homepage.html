@@ -16,15 +16,22 @@
         <p>Customize your profile and see your activities here.</p>
     </div>
 
-    <!-- Sidebar with Insights section -->
-    <div class="sidebar">
-        <h2 class="insights-heading">My Insights</h2>
-        <div class="insights-box">
-            <p>Date Joined: <span class="date-joined">{{ created_at.strftime('%Y-%m-%d') }}</span></p>
-            <p>Leaderboard Position: <span class="leaderboard-pos">#1</span></p>
+    <!-- Insights and Posts Section -->
+    <div class="content-area">
+        <div class="insights-posts-container">
+            <!-- Insights Box -->
+            <div class="insights-box">
+                <h2>My Insights</h2>
+                <p>Date Joined: <span class="date-joined">{{ created_at.strftime('%Y-%m-%d') }}</span></p>
+                <p>Leaderboard Position: <span class="leaderboard-pos">#1</span></p>
+            </div>
+
+            <!-- Posts Box -->
+            <div class="posts-box">
+                <h2>My Posts</h2>
+                <!-- Posts content goes here -->
+            </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
-
