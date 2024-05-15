@@ -11,6 +11,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Add created_at field
+    avatar = db.Column(db.String(120), nullable=False, default='default_avatar.png')  # Add avatar field with default
 
     def set_password(self, password):
         """Create password hash with a random salt"""
@@ -24,6 +25,7 @@ class User(db.Model):
     def _generate_hash(self, password, salt):
         """Generate hash using SHA-256 and the provided salt"""
         return hashlib.sha256(f"{salt}{password}".encode()).hexdigest()
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)

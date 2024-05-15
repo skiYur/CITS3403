@@ -1,0 +1,33 @@
+.review {
+    padding-top: 20px; /* Add extra padding to the top of each review */
+    margin-bottom: 20px; /* Add spacing between reviews */
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Add space between the header and review content */
+}
+
+.review-header .avatar {
+    width: 40px;  /* Make the avatar smaller */
+    height: 40px; /* Make the avatar smaller */
+    border-radius: 50%;
+    margin-right: 10px; /* Add some space between the avatar and the username */
+}
+
+.review-header strong {
+    font-size: 1.2em;
+}
+
+.review-content {
+    margin-bottom: 10px; /* Add space between the review details */
+}
+
+.review-content p {
+    margin: 5px 0; /* Add spacing between each review detail */
+}
+
+#drink-review-form {
+    margin-bottom: 50px; /* Add larger space between form and recent reviews */
+}

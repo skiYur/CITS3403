@@ -6,14 +6,14 @@
     <div class="banner">
         <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner" class="banner-img">
         <div class="avatar-wrapper">
-            <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-img">
+            <img src="{{ url_for('static', filename='images/avatars/default_avatar.png') }}" alt="User Avatar" class="avatar-img">
         </div>
         <div class="username">{{ username }}</div> <!-- Display the username next to the avatar -->
     </div>
 
     <div class="user-info">
         <h1>Welcome, {{ username }}!</h1>
-        <p>Customize your profile and see your activities here.</p>
+        <p>Customise your profile and see your activities here.</p>
     </div>
 
     <!-- Insights and Posts Section -->
@@ -33,7 +33,5 @@
             </div>
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </div>
 {% endblock %}

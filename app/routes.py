@@ -88,48 +88,64 @@ def api_leaderboard():
 @login_required
 def vodka():
     recent_reviews = Post.query.filter_by(drink_type='vodka').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Vodka', reviews=recent_reviews)
 
 @routes.route('/whisky')
 @login_required
 def whisky():
     recent_reviews = Post.query.filter_by(drink_type='whisky').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Whisky/Whiskey', reviews=recent_reviews)
 
 @routes.route('/gin')
 @login_required
 def gin():
     recent_reviews = Post.query.filter_by(drink_type='gin').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Gin', reviews=recent_reviews)
 
 @routes.route('/rum')
 @login_required
 def rum():
     recent_reviews = Post.query.filter_by(drink_type='rum').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Rum', reviews=recent_reviews)
 
 @routes.route('/tequila')
 @login_required
 def tequila():
     recent_reviews = Post.query.filter_by(drink_type='tequila').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Tequila', reviews=recent_reviews)
 
 @routes.route('/liqueur')
 @login_required
 def liqueur():
     recent_reviews = Post.query.filter_by(drink_type='liqueur').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Liqueur', reviews=recent_reviews)
 
 @routes.route('/other')
 @login_required
 def other():
     recent_reviews = Post.query.filter_by(drink_type='other').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Other', reviews=recent_reviews)
 
 @routes.route('/nonalcoholic')
 @login_required
 def nonalcoholic():
     recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
+    for review in recent_reviews:
+        review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
 
 @routes.route('/leaderboard')

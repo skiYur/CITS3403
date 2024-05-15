@@ -2,6 +2,10 @@
 
 {% block title %}Drink Review{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reviews.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <!-- Drink Review Form -->
@@ -48,7 +52,19 @@
             <div id="drink-reviews">
                 {% for review in reviews %}
                 <div class="review">
-                    <p>{{ review.content }}</p>
+                    <div class="review-body">
+                        <div class="review-header">
+                            <img src="{{ url_for('static', filename='images/avatars/' + review.user.avatar) }}" alt="{{ review.user.username }}'s avatar" class="avatar">
+                            <strong>{{ review.user.username }}</strong>
+                        </div>
+                        <div class="review-content">
+                            <p><strong>Drink Name:</strong> {{ review.content.split(",")[0].split(":")[1].strip() }}</p>
+                            <p><strong>Rating:</strong> {{ review.content.split(",")[1].split(":")[1].strip() }}</p>
+                            <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
+                            <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
+                            <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
+                        </div>
+                    </div>
                     <small>Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                 </div>
                 {% endfor %}
