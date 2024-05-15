@@ -1,3 +1,4 @@
+# app/__init__.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -9,10 +10,11 @@ migrate = Migrate()
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'this-is-a-unique-secret-key'  # Updated key
+    app.config['SECRET_KEY'] = 'this-is-a-unique-secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['DEBUG'] = True  # Enable debug mode
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/images/avatars')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max file size
 
     db.init_app(app)
     migrate.init_app(app, db)

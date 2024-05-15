@@ -11,7 +11,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(64), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Add created_at field
-    avatar = db.Column(db.String(120), nullable=False, default='default_avatar.png')  # Add avatar field with default
+    avatar = db.Column(db.String(120), nullable=False, default='images/avatars/default_avatar.png')
 
     def set_password(self, password):
         """Create password hash with a random salt"""

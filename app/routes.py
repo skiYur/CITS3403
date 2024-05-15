@@ -3,6 +3,12 @@ from .models import User, Post
 from . import db
 from datetime import datetime
 from functools import wraps
+import os
+from flask import current_app, url_for
+from werkzeug.utils import secure_filename
+from .forms import UploadAvatarForm
+
+
 
 routes = Blueprint('routes', __name__)
 
@@ -21,7 +27,8 @@ def home():
         user = User.query.filter_by(username=session['username']).first()
         if user:
             user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
-            return render_template('homepage.html', username=user.username, created_at=user.created_at, isLoggedIn=True, user_posts=user_posts)
+            form = UploadAvatarForm()
+            return render_template('homepage.html', user=user, isLoggedIn=True, user_posts=user_posts, form=form)
         else:
             flash('User not found', category='danger')
             return redirect(url_for('routes.login'))
@@ -70,7 +77,7 @@ def sign_up():
             flash('Username or email already exists', category='danger')
             return redirect(url_for('routes.sign_up'))
 
-        user = User(username=username, email=email, created_at=datetime.utcnow())
+        user = User(username=username, email=email, created_at=datetime.utcnow(), avatar='images/avatars/default_avatar.png')
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
@@ -192,3 +199,33 @@ def delete_review(review_id):
 def login_status():
     is_logged_in = 'username' in session
     return jsonify(isLoggedIn=is_logged_in)
+
+@routes.route('/upload_avatar', methods=['POST'])
+@login_required
+def upload_avatar():
+    form = UploadAvatarForm()
+    if form.validate_on_submit():
+        file = form.avatar.data
+        filename = secure_filename(file.filename)
+        user = User.query.filter_by(username=session['username']).first()
+        if user:
+            avatar_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            file.save(avatar_path)
+            user.avatar = f'images/avatars/{filename}'
+            db.session.commit()
+            flash('Avatar uploaded successfully!', 'success')
+            return redirect(url_for('routes.home'))
+        else:
+            flash('User not found', 'danger')
+    return redirect(url_for('routes.home'))
+
+@routes.route('/remove_avatar', methods=['POST'])
+@login_required
+def remove_avatar():
+    user = User.query.filter_by(username=session['username']).first()
+    if user:
+        user.avatar = 'images/avatars/default_avatar.png'
+        db.session.commit()
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 404
