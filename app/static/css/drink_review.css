@@ -1,12 +1,18 @@
 .review {
     padding-top: 20px; /* Add extra padding to the top of each review */
-    margin-bottom: 20px; /* Add spacing between reviews */
+    margin-bottom: 30px; /* Add more spacing between reviews */
+}
+
+.review-body {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px; /* Add space between the header and review content */
 }
 
 .review-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Add space between the header and review content */
+    margin-right: 20px; /* Add some space between the header and the content */
 }
 
 .review-header .avatar {
@@ -21,7 +27,8 @@
 }
 
 .review-content {
-    margin-bottom: 10px; /* Add space between the review details */
+    display: flex;
+    flex-direction: column;
 }
 
 .review-content p {
