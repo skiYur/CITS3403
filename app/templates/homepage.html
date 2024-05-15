@@ -2,18 +2,29 @@
 
 {% block content %}
 <div class="container">
-    <!-- banner with avatar -->
+    <!-- Banner with Avatar and Username -->
     <div class="banner">
         <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner" class="banner-img">
         <div class="avatar-wrapper">
-            <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" class="avatar-img">
+            <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="User Avatar" class="avatar-img">
         </div>
+        <div class="username">{{ username }}</div> <!-- Display the username next to the avatar -->
     </div>
-    
+
     <div class="user-info">
         <h1>Welcome, {{ username }}!</h1>
-        <p>Customise your profile and see your activities here.</p>
-        <!-- Recent Posts -->
+        <p>Customize your profile and see your activities here.</p>
+    </div>
+
+    <!-- Sidebar with Insights section -->
+    <div class="sidebar">
+        <h2 class="insights-heading">My Insights</h2>
+        <div class="insights-box">
+            <p>Date Joined: <span class="date-joined">{{ created_at.strftime('%Y-%m-%d') }}</span></p>
+            <p>Leaderboard Position: <span class="leaderboard-pos">#1</span></p>
+        </div>
     </div>
 </div>
+
 {% endblock %}
+

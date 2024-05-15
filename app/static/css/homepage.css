@@ -117,3 +117,15 @@ textarea {
     margin-top: 60px; /* Adjusted margin to clear space below the avatar */
     text-align: center;
 }
+
+.username {
+    position: absolute;
+    left: 130px; /* Position the username directly next to the avatar */
+    bottom: 10px; /* Align vertically with the bottom of the avatar */
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 20px;
+    z-index: 10; /* Ensure it appears above the banner */
+}

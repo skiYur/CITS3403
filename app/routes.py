@@ -1,9 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify
 from .models import User, Post
 from . import db
-from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-
 
 routes = Blueprint('routes', __name__)
 
@@ -12,15 +10,14 @@ def home():
     if 'username' in session:
         user = User.query.filter_by(username=session['username']).first()
         if user:
-            print(f"DEBUG: User found: {user.username}")  # Debug statement
-            return render_template('homepage.html', username=user.username)
+            print(f"DEBUG: User found: {user.username}, Created at: {user.created_at}")  # Debug statement
+            return render_template('homepage.html', username=user.username, created_at=user.created_at)
         else:
-            # Handle case where user is not found in the database
             flash('User not found', category='danger')
             return redirect(url_for('routes.login'))
     else:
-        # Redirect to login if not logged in
         return redirect(url_for('routes.login'))
+
 
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
@@ -63,15 +60,15 @@ def sign_up():
             flash('Username or email already exists', category='danger')
             return redirect(url_for('routes.sign_up'))
 
-        user = User(username=username, email=email)
+        user = User(username=username, email=email, created_at=datetime.utcnow())
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         flash('Registration successful', category='success')
-        print(f"DEBUG: Registration successful for user: {user.username}")  # Debug statement
         return redirect(url_for('routes.login'))
 
     return render_template('sign_up.html')
+
 
 @routes.route('/api/leaderboard')
 def api_leaderboard():
@@ -124,7 +121,6 @@ def nonalcoholic():
 @routes.route('/leaderboard')
 def leaderboard():
     return render_template('leaderboard.html')
-
 
 @routes.route('/submit_review/<drink_type>', methods=['POST'])
 def submit_review(drink_type):
