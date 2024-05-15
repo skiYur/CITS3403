@@ -21,21 +21,21 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="alcoholicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle restricted-link" href="#" id="alcoholicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Alcoholic
                         </a>
                         <div class="dropdown-menu" aria-labelledby="alcoholicDropdown">
-                            <a class="dropdown-item" href="/vodka">Vodka</a>
-                            <a class="dropdown-item" href="/whisky">Whisky/Whiskey</a>
-                            <a class="dropdown-item" href="/gin">Gin</a>
-                            <a class="dropdown-item" href="/rum">Rum</a>
-                            <a class="dropdown-item" href="/tequila">Tequila</a>
-                            <a class="dropdown-item" href="/liqueur">Liqueur</a>
-                            <a class="dropdown-item" href="/other">Other</a>
+                            <a class="dropdown-item restricted-link" href="/vodka">Vodka</a>
+                            <a class="dropdown-item restricted-link" href="/whisky">Whisky/Whiskey</a>
+                            <a class="dropdown-item restricted-link" href="/gin">Gin</a>
+                            <a class="dropdown-item restricted-link" href="/rum">Rum</a>
+                            <a class="dropdown-item restricted-link" href="/tequila">Tequila</a>
+                            <a class="dropdown-item restricted-link" href="/liqueur">Liqueur</a>
+                            <a class="dropdown-item restricted-link" href="/other">Other</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/nonalcoholic">Non-alcoholic</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/nonalcoholic">Non-alcoholic</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/leaderboard">Leaderboard</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
@@ -60,5 +60,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body>
 </html>

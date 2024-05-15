@@ -2,22 +2,30 @@ from flask import Blueprint, render_template, redirect, request, url_for, flash,
 from .models import User, Post
 from . import db
 from datetime import datetime
+from functools import wraps
 
 routes = Blueprint('routes', __name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' not in session:
+            flash('Please log in or sign up to access this page.', category='danger')
+            return redirect(url_for('routes.login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @routes.route('/')
 def home():
     if 'username' in session:
         user = User.query.filter_by(username=session['username']).first()
         if user:
-            print(f"DEBUG: User found: {user.username}, Created at: {user.created_at}")  # Debug statement
-            return render_template('homepage.html', username=user.username, created_at=user.created_at)
+            return render_template('homepage.html', username=user.username, created_at=user.created_at, isLoggedIn=True)
         else:
             flash('User not found', category='danger')
             return redirect(url_for('routes.login'))
     else:
         return redirect(url_for('routes.login'))
-
 
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
@@ -69,7 +77,6 @@ def sign_up():
 
     return render_template('sign_up.html')
 
-
 @routes.route('/api/leaderboard')
 def api_leaderboard():
     users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
@@ -77,57 +84,62 @@ def api_leaderboard():
         {"username": user.username, "postsCount": user.posts.count()} for user in users
     ])
 
-# Add routes for specific drink categories
 @routes.route('/vodka')
+@login_required
 def vodka():
     recent_reviews = Post.query.filter_by(drink_type='vodka').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Vodka', reviews=recent_reviews)
 
 @routes.route('/whisky')
+@login_required
 def whisky():
     recent_reviews = Post.query.filter_by(drink_type='whisky').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Whisky/Whiskey', reviews=recent_reviews)
 
 @routes.route('/gin')
+@login_required
 def gin():
     recent_reviews = Post.query.filter_by(drink_type='gin').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Gin', reviews=recent_reviews)
 
 @routes.route('/rum')
+@login_required
 def rum():
     recent_reviews = Post.query.filter_by(drink_type='rum').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Rum', reviews=recent_reviews)
 
 @routes.route('/tequila')
+@login_required
 def tequila():
     recent_reviews = Post.query.filter_by(drink_type='tequila').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Tequila', reviews=recent_reviews)
 
 @routes.route('/liqueur')
+@login_required
 def liqueur():
     recent_reviews = Post.query.filter_by(drink_type='liqueur').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Liqueur', reviews=recent_reviews)
 
 @routes.route('/other')
+@login_required
 def other():
     recent_reviews = Post.query.filter_by(drink_type='other').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Other', reviews=recent_reviews)
 
 @routes.route('/nonalcoholic')
+@login_required
 def nonalcoholic():
     recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
     return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
 
 @routes.route('/leaderboard')
+@login_required
 def leaderboard():
     return render_template('leaderboard.html')
 
 @routes.route('/submit_review/<drink_type>', methods=['POST'])
+@login_required
 def submit_review(drink_type):
-    if 'username' not in session:
-        flash('You must be logged in to submit reviews', category='error')
-        return redirect(url_for('routes.login'))
-
     drink_name = request.form.get('drinkName')
     instructions = request.form.get('instructions')
     ingredients = request.form.get('ingredients')
