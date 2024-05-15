@@ -11,6 +11,9 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'this-is-a-unique-secret-key'  # Updated key
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['DEBUG'] = True  # Enable debug mode
+
     db.init_app(app)
     migrate.init_app(app, db)
 
