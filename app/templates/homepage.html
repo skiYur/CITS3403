@@ -29,7 +29,18 @@
             <!-- Posts Box -->
             <div class="posts-box">
                 <h2>My Posts</h2>
-                <!-- Posts content goes here -->
+                <div id="user-posts">
+                    {% if user_posts %}
+                        {% for post in user_posts %}
+                            <div class="post">
+                                <p>{{ post.content }}</p>
+                                <small>Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>You have not made any posts yet.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

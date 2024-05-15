@@ -20,7 +20,8 @@ def home():
     if 'username' in session:
         user = User.query.filter_by(username=session['username']).first()
         if user:
-            return render_template('homepage.html', username=user.username, created_at=user.created_at, isLoggedIn=True)
+            user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
+            return render_template('homepage.html', username=user.username, created_at=user.created_at, isLoggedIn=True, user_posts=user_posts)
         else:
             flash('User not found', category='danger')
             return redirect(url_for('routes.login'))
