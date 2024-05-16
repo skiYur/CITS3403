@@ -22,10 +22,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-
-
-
     form.addEventListener("submit", function(event) {
         event.preventDefault();
         const formData = new FormData(this);
@@ -46,8 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-
     function deleteReview(reviewId) {
         if (confirm('Are you sure you want to delete this review?')) {
             fetch(`/delete_review/${reviewId}`, {
@@ -66,6 +60,17 @@ document.addEventListener("DOMContentLoaded", function() {
               });
         }
     }
-    
-    
+
+    // Export deleteReview function to be accessible globally
+    window.deleteReview = deleteReview;
+
+    // Toggle the visibility of the review form
+    document.getElementById('toggle-review-form').addEventListener('click', function() {
+        var formContainer = document.getElementById('review-form-container');
+        if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+            formContainer.style.display = 'block';
+        } else {
+            formContainer.style.display = 'none';
+        }
+    });
 });
