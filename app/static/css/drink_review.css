@@ -1,25 +1,25 @@
 .review {
-    padding-top: 20px; /* Add extra padding to the top of each review */
-    margin-bottom: 30px; /* Add more spacing between reviews */
+    padding-top: 20px; 
+    margin-bottom: 30px; /* add more spacing between reviews */
 }
 
 .review-body {
     display: flex;
     align-items: flex-start;
-    margin-bottom: 10px; /* Add space between the header and review content */
+    margin-bottom: 10px; /* add space between the header and review content */
 }
 
 .review-header {
     display: flex;
     align-items: center;
-    margin-right: 20px; /* Add some space between the header and the content */
+    margin-right: 20px; /* add some space between the header and the content */
 }
 
 .review-header .avatar {
-    width: 40px;  /* Make the avatar smaller */
-    height: 40px; /* Make the avatar smaller */
+    width: 40px;  /* make the avatar smaller */
+    height: 40px; /* make the avatar smaller */
     border-radius: 50%;
-    margin-right: 10px; /* Add some space between the avatar and the username */
+    margin-right: 10px; /* add some space between the avatar and the username */
 }
 
 .review-header strong {
@@ -32,9 +32,9 @@
 }
 
 .review-content p {
-    margin: 5px 0; /* Add spacing between each review detail */
+    margin: 5px 0; /* add spacing between each review detail */
 }
 
 #drink-review-form {
-    margin-bottom: 50px; /* Add larger space between form and recent reviews */
+    margin-bottom: 50px; /* add larger space between form and recent reviews */
 }

@@ -22,10 +22,6 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-
-
-
     form.addEventListener("submit", function(event) {
         event.preventDefault();
         const formData = new FormData(this);
@@ -35,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function() {
             body: formData
         }).then(response => {
             if (response.ok) {
-                // Assuming you want to fetch and display the reviews or refresh the page
                 window.location.reload();
             } else {
                 alert("Failed to submit the review. Please try again.");
@@ -46,9 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-
-
-    function deleteReview(reviewId) {
+    window.deleteReview = function(reviewId) {
         if (confirm('Are you sure you want to delete this review?')) {
             fetch(`/delete_review/${reviewId}`, {
                 method: 'DELETE'
@@ -66,6 +59,26 @@ document.addEventListener("DOMContentLoaded", function() {
               });
         }
     }
-    
-    
+
+    window.likePost = function(postId, action) {
+        fetch(`/like_post/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: action })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  document.getElementById(`like-count-${postId}`).innerText = data.likes;
+                  document.getElementById(`super-like-count-${postId}`).innerText = data.super_likes;
+                  document.getElementById(`dislike-count-${postId}`).innerText = data.dislikes;
+              } else {
+                  alert(data.message);
+              }
+          }).catch(error => {
+              console.error('Error:', error);
+              alert('Error updating like status.');
+          });
+    }
 });

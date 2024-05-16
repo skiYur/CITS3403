@@ -1,14 +1,12 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify
-from .models import User, Post
-from . import db
+from .models import User, Post, Reaction, db
 from datetime import datetime
 from functools import wraps
 import os
 from flask import current_app, url_for
 from werkzeug.utils import secure_filename
 from .forms import UploadAvatarForm
-
-
+from flask_login import login_required, current_user
 
 routes = Blueprint('routes', __name__)
 
@@ -38,7 +36,7 @@ def home():
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        identifier = request.form.get('email')  
+        identifier = request.form.get('email')
         password = request.form.get('password')
 
         user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
@@ -229,3 +227,43 @@ def remove_avatar():
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': False}), 404
+
+
+@routes.route('/like_post/<int:post_id>', methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    action = request.json.get('action')
+    existing_reaction = Reaction.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+    if existing_reaction:
+        if existing_reaction.reaction == action:
+            db.session.delete(existing_reaction)
+            update_post_reactions(post, action, -1)
+        else:
+            update_post_reactions(post, existing_reaction.reaction, -1)
+            existing_reaction.reaction = action
+            db.session.add(existing_reaction)
+            update_post_reactions(post, action, 1)
+    else:
+        new_reaction = Reaction(user_id=current_user.id, post_id=post_id, reaction=action)
+        db.session.add(new_reaction)
+        update_post_reactions(post, action, 1)
+
+    db.session.commit()
+    return jsonify({
+        'success': True,
+        'likes': post.likes,
+        'super_likes': post.super_likes,
+        'dislikes': post.dislikes
+    })
+
+def update_post_reactions(post, reaction_type, delta):
+    if reaction_type == 'like':
+        post.likes += delta
+    elif reaction_type == 'super_like':
+        post.super_likes += delta
+    elif reaction_type == 'dislike':
+        post.dislikes += delta
+    db.session.commit()
+
