@@ -19,7 +19,7 @@
     <div class="row" id="review-form-container" style="display: none;">
         <div class="col-md-12">
             <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
+            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type.replace('-', '').replace('/', '')) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
                     <input type="text" class="form-control" id="drink-name" name="drinkName" required>

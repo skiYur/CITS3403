@@ -101,13 +101,13 @@ def vodka():
         review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Vodka', reviews=recent_reviews)
 
-@routes.route('/whisky')
+@routes.route('/whiskey')
 @login_required
-def whisky():
-    recent_reviews = Post.query.filter_by(drink_type='whisky').order_by(Post.created_at.desc()).all()
+def whiskey():
+    recent_reviews = Post.query.filter_by(drink_type='whiskey').order_by(Post.created_at.desc()).all()
     for review in recent_reviews:
         review.user = User.query.get(review.user_id)
-    return render_template('drink_review.html', drink_type='Whisky/Whiskey', reviews=recent_reviews)
+    return render_template('drink_review.html', drink_type='Whiskey', reviews=recent_reviews)
 
 @routes.route('/gin')
 @login_required
@@ -155,12 +155,16 @@ def nonalcoholic():
     recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
     for review in recent_reviews:
         review.user = User.query.get(review.user_id)
+        print(f"Review ID: {review.id}, User: {review.user.username}, Content: {review.content}, Created At: {review.created_at}")
     return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
+
+
 
 @routes.route('/leaderboard')
 @login_required
 def leaderboard():
     return render_template('leaderboard.html')
+
 
 @routes.route('/submit_review/<drink_type>', methods=['POST'])
 @login_required
@@ -177,12 +181,18 @@ def submit_review(drink_type):
         return redirect(url_for('routes.login'))
 
     content = f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}"
-    new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower(), created_at=datetime.utcnow())
+    print(f"Saving review: {content}")  # Debug print
+    drink_type_cleaned = drink_type.lower().replace('-', '').replace('/', '')
+    print(f"Drink type: {drink_type_cleaned}")  # Debug print
+    new_post = Post(content=content, user_id=user.id, drink_type=drink_type_cleaned, created_at=datetime.utcnow())
     db.session.add(new_post)
     db.session.commit()
+    print("Review saved successfully!")  # Debug print
 
     flash('Review submitted successfully!', category='success')
-    return redirect(url_for('routes.' + drink_type.lower()))  # Ensure this redirection is to a valid endpoint
+    return redirect(url_for(f'routes.{drink_type_cleaned}'))
+
+
 
 @routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
 @login_required
