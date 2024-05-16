@@ -16,9 +16,30 @@
                 </tr>
             </thead>
             <tbody id="leaderboard-body">
+                <!-- Data will be inserted here by JavaScript -->
             </tbody>
         </table>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("{{ url_for('routes.api_leaderboard') }}")
+        .then(response => response.json())
+        .then(data => {
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            leaderboardBody.innerHTML = '';
+
+            data.forEach((user, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <th scope="row">${index + 1}</th>
+                    <td><img src="${user.avatar}" alt="Avatar" class="avatar-img-small"> <a href="{{ url_for('routes.user_profile', username='') }}${user.username}">${user.username}</a></td>
+                    <td>${user.postsCount}</td>
+                `;
+                leaderboardBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching leaderboard data:', error));
+});
+</script>
 {% endblock %}

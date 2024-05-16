@@ -1,37 +1,24 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify, current_app
-from werkzeug.utils import secure_filename
-from .models import User, Post
-from . import db
+from flask_login import login_user, logout_user, current_user, login_required
+from .models import User, Post, Reaction, db
 from datetime import datetime
-from functools import wraps
-import os
+from werkzeug.utils import secure_filename
 from .forms import UploadAvatarForm
 import re
-
+import os
 
 routes = Blueprint('routes', __name__)
 
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'username' not in session:
-            flash('Please log in or sign up to access this page.', category='danger')
-            return redirect(url_for('routes.login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
 @routes.route('/')
+@login_required
 def home():
-    if 'username' in session:
-        user = User.query.filter_by(username=session['username']).first()
-        if user:
-            user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
-            form = UploadAvatarForm()
-            return render_template('homepage.html', user=user, isLoggedIn=True, user_posts=user_posts, form=form)
-        else:
-            flash('User not found', category='danger')
-            return redirect(url_for('routes.login'))
+    user = User.query.filter_by(username=session['username']).first()
+    if user:
+        user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
+        form = UploadAvatarForm()
+        return render_template('homepage.html', user=user, isLoggedIn=True, user_posts=user_posts, form=form)
     else:
+        flash('User not found', category='danger')
         return redirect(url_for('routes.login'))
 
 @routes.route('/login', methods=['GET', 'POST'])
@@ -44,6 +31,7 @@ def login():
         if user and user.check_password(password):
             session['username'] = user.username
             session['user_id'] = user.id
+            login_user(user)  # Use login_user to log in the user with Flask-Login
             flash('Login successful', category='success')
             return redirect(url_for('routes.home'))
         else:
@@ -52,13 +40,13 @@ def login():
     return render_template('login.html')
 
 @routes.route('/logout')
+@login_required
 def logout():
+    logout_user()
     session.pop('username', None)
+    session.pop('user_id', None)
     flash('You have been logged out', category='success')
     return redirect(url_for('routes.login'))
-
-
-
 
 def is_strong_password(password):
     """Check if the password is strong."""
@@ -103,15 +91,14 @@ def sign_up():
 
     return render_template('sign_up.html')
 
-
 @routes.route('/api/leaderboard')
 def api_leaderboard():
     users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).limit(10).all()
     leaderboard = [
         {
             "username": user.username,
-            "postsCount": len(user.posts),  # Access the number of posts
-            "avatar": user.avatar
+            "postsCount": len(user.posts),
+            "avatar": url_for('static', filename=user.avatar)  # Use url_for to generate the full URL
         }
         for user in users
     ]
@@ -179,16 +166,12 @@ def nonalcoholic():
     recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
     for review in recent_reviews:
         review.user = User.query.get(review.user_id)
-        print(f"Review ID: {review.id}, User: {review.user.username}, Content: {review.content}, Created At: {review.created_at}")
     return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
-
-
 
 @routes.route('/leaderboard')
 @login_required
 def leaderboard():
     return render_template('leaderboard.html')
-
 
 @routes.route('/submit_review/<drink_type>', methods=['POST'])
 @login_required
@@ -199,40 +182,83 @@ def submit_review(drink_type):
     review_text = request.form.get('review')
     rating = request.form.get('rating')
 
-    user = User.query.filter_by(username=session['username']).first()
+    user = current_user  # Use current_user from Flask-Login
     if not user:
         flash('User not found', category='error')
         return redirect(url_for('routes.login'))
 
     content = f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}"
-    print(f"Saving review: {content}")  # Debug print
-    drink_type_cleaned = drink_type.lower().replace('-', '').replace('/', '')
-    print(f"Drink type: {drink_type_cleaned}")  # Debug print
-    new_post = Post(content=content, user_id=user.id, drink_type=drink_type_cleaned, created_at=datetime.utcnow())
+    new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower(), created_at=datetime.utcnow())
     db.session.add(new_post)
     db.session.commit()
-    print("Review saved successfully!")  # Debug print
 
     flash('Review submitted successfully!', category='success')
-    return redirect(url_for(f'routes.{drink_type_cleaned}'))
-
-
+    return redirect(url_for(f'routes.{drink_type.lower()}'))
 
 @routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
 @login_required
 def delete_review(review_id):
     review = Post.query.get(review_id)
-    if review and review.user_id == session['user_id']:
+    if review and review.user_id == current_user.id:
         db.session.delete(review)
         db.session.commit()
         return jsonify({'success': True}), 200
     else:
-        return jsonify({'success': False}), 403  # Forbidden or not found
+        return jsonify({'success': False}), 403
 
-@routes.route('/api/login_status')
-def login_status():
-    is_logged_in = 'username' in session
-    return jsonify(isLoggedIn=is_logged_in)
+@routes.route('/like_post/<int:post_id>', methods=['POST'])
+@login_required
+def like_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    action = request.json.get('action')
+    existing_reaction = Reaction.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+    if existing_reaction:
+        if existing_reaction.reaction == action:
+            db.session.delete(existing_reaction)
+            update_post_reactions(post, action, -1)
+        else:
+            update_post_reactions(post, existing_reaction.reaction, -1)
+            existing_reaction.reaction = action
+            db.session.add(existing_reaction)
+            update_post_reactions(post, action, 1)
+    else:
+        new_reaction = Reaction(user_id=current_user.id, post_id=post_id, reaction=action)
+        db.session.add(new_reaction)
+        update_post_reactions(post, action, 1)
+
+    db.session.commit()
+    return jsonify({
+        'success': True,
+        'likes': post.likes,
+        'super_likes': post.super_likes,
+        'dislikes': post.dislikes
+    })
+
+def update_post_reactions(post, reaction_type, delta):
+    if reaction_type == 'like':
+        post.likes += delta
+    elif reaction_type == 'super_like':
+        post.super_likes += delta
+    elif reaction_type == 'dislike':
+        post.dislikes += delta
+    db.session.commit()
+
+@routes.route('/search', methods=['GET'])
+@login_required
+def search():
+    query = request.args.get('query')
+    if query:
+        users = User.query.filter(User.username.like(f'%{query}%')).all()
+        if users:
+            return render_template('search_results.html', users=users, query=query)
+        else:
+            flash('No users found', category='warning')
+            return redirect(url_for('routes.home'))
+    else:
+        flash('Enter a username to search', category='warning')
+        return redirect(url_for('routes.home'))
+
 
 @routes.route('/upload_avatar', methods=['POST'])
 @login_required
@@ -253,6 +279,19 @@ def upload_avatar():
             flash('User not found', 'danger')
     return redirect(url_for('routes.home'))
 
+@routes.route('/api/leaderboard-position', methods=['GET'])
+@login_required
+def get_leaderboard_position():
+    user = User.query.filter_by(username=session['username']).first()
+    if not user:
+        return jsonify({"position": None}), 404
+
+    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
+    position = next((index + 1 for index, u in enumerate(users) if u.id == user.id), None)
+    
+    return jsonify({"position": position})
+
+
 @routes.route('/remove_avatar', methods=['POST'])
 @login_required
 def remove_avatar():
@@ -263,21 +302,7 @@ def remove_avatar():
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': False}), 404
-
-@routes.route('/api/leaderboard-position', methods=['GET'])
-@login_required
-def get_leaderboard_position():
-    user = User.query.filter_by(username=session['username']).first()
-    if not user:
-        return jsonify({"position": None}), 404
-
-    # Get all users and sort by the number of posts
-    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
     
-    # Determine the current user's position
-    position = next((index + 1 for index, u in enumerate(users) if u.id == user.id), None)
-    
-    return jsonify({"position": position})
 
 @routes.route('/user/<username>')
 @login_required
@@ -290,18 +315,3 @@ def user_profile(username):
     user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
     return render_template('user_profile.html', user=user, user_posts=user_posts)
 
-
-@routes.route('/search', methods=['GET'])
-@login_required
-def search():
-    query = request.args.get('query')
-    if query:
-        users = User.query.filter(User.username.like(f'%{query}%')).all()
-        if users:
-            return render_template('search_results.html', users=users, query=query)
-        else:
-            flash('No users found', category='warning')
-            return redirect(url_for('routes.home'))
-    else:
-        flash('Enter a username to search', category='warning')
-        return redirect(url_for('routes.home'))

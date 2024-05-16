@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function() {
             body: formData
         }).then(response => {
             if (response.ok) {
-                // Assuming you want to fetch and display the reviews or refresh the page
                 window.location.reload();
             } else {
                 alert("Failed to submit the review. Please try again.");
@@ -42,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    function deleteReview(reviewId) {
+    window.deleteReview = function(reviewId) {
         if (confirm('Are you sure you want to delete this review?')) {
             fetch(`/delete_review/${reviewId}`, {
                 method: 'DELETE'
@@ -61,10 +60,28 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Export deleteReview function to be accessible globally
-    window.deleteReview = deleteReview;
+    window.likePost = function(postId, action) {
+        fetch(`/like_post/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ action: action })
+        }).then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  document.getElementById(`like-count-${postId}`).innerText = data.likes;
+                  document.getElementById(`super-like-count-${postId}`).innerText = data.super_likes;
+                  document.getElementById(`dislike-count-${postId}`).innerText = data.dislikes;
+              } else {
+                  alert(data.message);
+              }
+          }).catch(error => {
+              console.error('Error:', error);
+              alert('Error updating like status.');
+          });
+    }
 
-    // Toggle the visibility of the review form
     document.getElementById('toggle-review-form').addEventListener('click', function() {
         var formContainer = document.getElementById('review-form-container');
         if (formContainer.style.display === 'none' || formContainer.style.display === '') {
