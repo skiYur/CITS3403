@@ -239,3 +239,18 @@ def remove_avatar():
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': False}), 404
+
+@routes.route('/api/leaderboard-position', methods=['GET'])
+@login_required
+def get_leaderboard_position():
+    user = User.query.filter_by(username=session['username']).first()
+    if not user:
+        return jsonify({"position": None}), 404
+
+    # Get all users and sort by the number of posts
+    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
+    
+    # Determine the current user's position
+    position = next((index + 1 for index, u in enumerate(users) if u.id == user.id), None)
+    
+    return jsonify({"position": position})

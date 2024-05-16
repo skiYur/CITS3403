@@ -30,7 +30,7 @@
             <div class="insights-box">
                 <h2>My Insights</h2>
                 <p>Date Joined: <span class="date-joined">{{ user.created_at.strftime('%Y-%m-%d') }}</span></p>
-                <p>Leaderboard Position: <span class="leaderboard-pos">#1</span></p>
+                <p>Leaderboard Position: <span class="leaderboard-pos" id="leaderboard-pos">Loading...</span></p>
             </div>
 
             <!-- Posts Box -->
@@ -54,6 +54,20 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Fetch the leaderboard position and update the leaderboard position
+        fetch("{{ url_for('routes.get_leaderboard_position') }}")
+            .then(response => response.json())
+            .then(data => {
+                if (data.position) {
+                    document.getElementById('leaderboard-pos').textContent = `#${data.position}`;
+                } else {
+                    document.getElementById('leaderboard-pos').textContent = 'Not ranked';
+                }
+            })
+            .catch(error => console.error('Error fetching leaderboard position:', error));
+    });
+
     document.getElementById('avatar-img').addEventListener('click', function() {
         document.getElementById('avatar-input').click();
     });
