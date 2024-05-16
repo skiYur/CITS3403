@@ -1,3 +1,5 @@
+# app/models.py
+
 import hashlib
 import hmac
 import os
@@ -10,8 +12,9 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(64), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Add created_at field
     avatar = db.Column(db.String(120), nullable=False, default='images/avatars/default_avatar.png')
+    posts = db.relationship('Post', backref='user', lazy=True)  # Define relationship with Post
 
     def set_password(self, password):
         """Create password hash with a random salt"""

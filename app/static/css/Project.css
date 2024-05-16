@@ -78,3 +78,12 @@ input, .btn {
     background-color: #c82333;
     border-color: #bd2130;
 }
+
+
+.avatar-leaderboard {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+}

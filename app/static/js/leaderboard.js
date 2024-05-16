@@ -1,3 +1,4 @@
+// leaderboard.js
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/leaderboard')
     .then(response => response.json())
@@ -6,7 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.innerHTML = '';  // Clear existing entries
         data.forEach((user, index) => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `<th scope="row">${index + 1}</th><td>${user.username}</td><td>${user.postsCount}</td>`;
+            tr.innerHTML = `
+                <th scope="row">${index + 1}</th>
+                <td>
+                    <img src="${user.avatar ? '/static/' + user.avatar : '/static/images/avatars/default_avatar.png'}" alt="${user.username}'s avatar" class="avatar-leaderboard">
+                    ${user.username}
+                </td>
+                <td>${user.postsCount}</td>`;
             tbody.appendChild(tr);
         });
     })

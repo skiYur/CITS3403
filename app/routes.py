@@ -1,14 +1,11 @@
-from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify
+from flask import Blueprint, render_template, redirect, request, url_for, flash, session, jsonify, current_app
+from werkzeug.utils import secure_filename
 from .models import User, Post
 from . import db
 from datetime import datetime
 from functools import wraps
 import os
-from flask import current_app, url_for
-from werkzeug.utils import secure_filename
 from .forms import UploadAvatarForm
-
-
 
 routes = Blueprint('routes', __name__)
 
@@ -38,7 +35,7 @@ def home():
 @routes.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        identifier = request.form.get('email')  
+        identifier = request.form.get('email')
         password = request.form.get('password')
 
         user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
@@ -46,11 +43,9 @@ def login():
             session['username'] = user.username
             session['user_id'] = user.id
             flash('Login successful', category='success')
-            print(f"DEBUG: Login successful for user: {user.username}")  # Debug statement
             return redirect(url_for('routes.home'))
         else:
             flash('Invalid login credentials', category='danger')
-            print("DEBUG: Invalid login credentials")  # Debug statement
 
     return render_template('login.html')
 
@@ -58,7 +53,6 @@ def login():
 def logout():
     session.pop('username', None)
     flash('You have been logged out', category='success')
-    print("DEBUG: User logged out")  # Debug statement
     return redirect(url_for('routes.login'))
 
 @routes.route('/register', methods=['GET', 'POST'])
@@ -88,10 +82,16 @@ def sign_up():
 
 @routes.route('/api/leaderboard')
 def api_leaderboard():
-    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).all()
-    return jsonify([
-        {"username": user.username, "postsCount": user.posts.count()} for user in users
-    ])
+    users = User.query.outerjoin(Post).group_by(User.id).order_by(db.func.count(Post.id).desc()).limit(10).all()
+    leaderboard = [
+        {
+            "username": user.username,
+            "postsCount": len(user.posts),  # Access the number of posts
+            "avatar": user.avatar
+        }
+        for user in users
+    ]
+    return jsonify(leaderboard)
 
 @routes.route('/vodka')
 @login_required
@@ -218,7 +218,6 @@ def upload_avatar():
         else:
             flash('User not found', 'danger')
     return redirect(url_for('routes.home'))
-
 
 @routes.route('/remove_avatar', methods=['POST'])
 @login_required
