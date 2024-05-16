@@ -12,7 +12,7 @@
         </div>
     {% endif %}
 {% endwith %}
-<form action="/register" method="post">
+<form id="sign-up-form" action="/register" method="post">
     <div class="d-flex flex-column">
         <label for="username">Username</label>
         <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Username" required>
@@ -26,6 +26,9 @@
     <div class="d-flex flex-column">
         <label for="password1">Password</label>
         <input type="password" class="form-control mb-3" id="password1" name="password1" placeholder="Enter Password" required>
+        <small id="passwordHelpBlock" class="form-text text-muted">
+            Your password must be at least 8 characters long, contain an uppercase letter, and a special character.
+        </small>
     </div>
 
     <div class="d-flex flex-column">
@@ -38,4 +41,27 @@
         <p>Already have an account? <a id="login" href="/login">Login here</a></p>
     </div>
 </form>
+
+<script>
+document.getElementById('sign-up-form').addEventListener('submit', function(event) {
+    const password1 = document.getElementById('password1').value;
+    const password2 = document.getElementById('password2').value;
+    const passwordHelpBlock = document.getElementById('passwordHelpBlock');
+
+    const strongPassword = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+
+    if (!strongPassword.test(password1)) {
+        event.preventDefault();
+        passwordHelpBlock.classList.add('text-danger');
+        passwordHelpBlock.textContent = 'Password must be at least 8 characters long, contain an uppercase letter, and a special character.';
+    } else if (password1 !== password2) {
+        event.preventDefault();
+        passwordHelpBlock.classList.add('text-danger');
+        passwordHelpBlock.textContent = 'Passwords do not match.';
+    } else {
+        passwordHelpBlock.classList.remove('text-danger');
+        passwordHelpBlock.textContent = 'Your password must be at least 8 characters long, contain an uppercase letter, and a special character.';
+    }
+});
+</script>
 {% endblock %}

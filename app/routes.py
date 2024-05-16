@@ -6,6 +6,8 @@ from datetime import datetime
 from functools import wraps
 import os
 from .forms import UploadAvatarForm
+import re
+
 
 routes = Blueprint('routes', __name__)
 
@@ -55,6 +57,19 @@ def logout():
     flash('You have been logged out', category='success')
     return redirect(url_for('routes.login'))
 
+
+
+
+def is_strong_password(password):
+    """Check if the password is strong."""
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Z]', password):
+        return False
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return False
+    return True
+
 @routes.route('/register', methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -67,8 +82,16 @@ def sign_up():
             flash('Passwords do not match', category='danger')
             return redirect(url_for('routes.sign_up'))
 
-        if User.query.filter((User.username == username) | (User.email == email)).first():
-            flash('Username or email already exists', category='danger')
+        if not is_strong_password(password):
+            flash('Password must be at least 8 characters long, contain an uppercase letter, and a special character.', category='danger')
+            return redirect(url_for('routes.sign_up'))
+
+        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+        if existing_user:
+            if existing_user.username == username:
+                flash('Username already exists', category='danger')
+            if existing_user.email == email:
+                flash('Email already exists', category='danger')
             return redirect(url_for('routes.sign_up'))
 
         user = User(username=username, email=email, created_at=datetime.utcnow(), avatar='images/avatars/default_avatar.png')
@@ -79,6 +102,7 @@ def sign_up():
         return redirect(url_for('routes.login'))
 
     return render_template('sign_up.html')
+
 
 @routes.route('/api/leaderboard')
 def api_leaderboard():
@@ -254,3 +278,30 @@ def get_leaderboard_position():
     position = next((index + 1 for index, u in enumerate(users) if u.id == user.id), None)
     
     return jsonify({"position": position})
+
+@routes.route('/user/<username>')
+@login_required
+def user_profile(username):
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash('User not found', category='danger')
+        return redirect(url_for('routes.leaderboard'))
+
+    user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
+    return render_template('user_profile.html', user=user, user_posts=user_posts)
+
+
+@routes.route('/search', methods=['GET'])
+@login_required
+def search():
+    query = request.args.get('query')
+    if query:
+        users = User.query.filter(User.username.like(f'%{query}%')).all()
+        if users:
+            return render_template('search_results.html', users=users, query=query)
+        else:
+            flash('No users found', category='warning')
+            return redirect(url_for('routes.home'))
+    else:
+        flash('Enter a username to search', category='warning')
+        return redirect(url_for('routes.home'))

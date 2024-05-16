@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
             tr.innerHTML = `
                 <th scope="row">${index + 1}</th>
                 <td>
-                    <img src="${user.avatar ? '/static/' + user.avatar : '/static/images/avatars/default_avatar.png'}" alt="${user.username}'s avatar" class="avatar-leaderboard">
-                    ${user.username}
+                    <a href="/user/${user.username}">
+                        <img src="${user.avatar ? '/static/' + user.avatar : '/static/images/avatars/default_avatar.png'}" alt="${user.username}'s avatar" class="avatar-leaderboard">
+                        ${user.username}
+                    </a>
                 </td>
                 <td>${user.postsCount}</td>`;
             tbody.appendChild(tr);
