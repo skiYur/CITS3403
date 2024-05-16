@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     salt = db.Column(db.String(64), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)  # Add created_at field
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     avatar = db.Column(db.String(120), nullable=False, default='images/avatars/default_avatar.png')
 
     def set_password(self, password):

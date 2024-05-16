@@ -219,6 +219,7 @@ def upload_avatar():
             flash('User not found', 'danger')
     return redirect(url_for('routes.home'))
 
+
 @routes.route('/remove_avatar', methods=['POST'])
 @login_required
 def remove_avatar():

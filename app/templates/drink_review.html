@@ -1,3 +1,4 @@
+<!-- drink_review.html -->
 {% extends "base.html" %}
 
 {% block title %}Drink Review{% endblock %}
@@ -54,7 +55,7 @@
                 <div class="review">
                     <div class="review-body">
                         <div class="review-header">
-                            <img src="{{ url_for('static', filename='images/avatars/' + review.user.avatar) }}" alt="{{ review.user.username }}'s avatar" class="avatar">
+                            <img src="{{ url_for('static', filename=review.user.avatar) }}" alt="{{ review.user.username }}'s avatar" class="avatar">
                             <strong>{{ review.user.username }}</strong>
                         </div>
                         <div class="review-content">
