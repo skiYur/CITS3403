@@ -29,6 +29,7 @@
             <!-- Insights Box -->
             <div class="insights-box">
                 <h2>My Insights</h2>
+                <p>Email: <span class="email">{{ user.email }}</span></p> <!-- Added email line -->
                 <p>Date Joined: <span class="date-joined">{{ user.created_at.strftime('%Y-%m-%d') }}</span></p>
                 <p>Leaderboard Position: <span class="leaderboard-pos" id="leaderboard-pos">Loading...</span></p>
             </div>
