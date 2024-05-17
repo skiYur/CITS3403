@@ -4,6 +4,7 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/project.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block content %}
@@ -73,14 +74,26 @@
                             <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
                             <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
                             <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
-                            <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
-                            <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
-                            <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
-                            {% if review.user_id != session['user_id'] %}
-                            <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">Like</button>
-                            <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">Super Like</button>
-                            <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">Dislike</button>
-                            {% endif %}
+                            <div class="review-buttons">
+                                <div>
+                                    <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
+                                    <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">
+                                        <i class="fas fa-thumbs-up"></i> Like
+                                    </button>
+                                </div>
+                                <div>
+                                    <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
+                                    <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">
+                                        <i class="fas fa-heart"></i> Super Like
+                                    </button>
+                                </div>
+                                <div>
+                                    <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
+                                    <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">
+                                        <i class="fas fa-thumbs-down"></i> Dislike
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <small>Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>

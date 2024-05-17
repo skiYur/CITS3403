@@ -185,3 +185,44 @@ input, .btn {
 .review-rating .far {
     color: #ccc; /* Light gray color for empty stars */
 }
+
+
+.btn-like, .btn-super-like, .btn-dislike {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px; /* Adjust padding for smaller size */
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-like {
+    background-color: #007bff; /* Blue */
+}
+
+.btn-super-like {
+    background-color: #ffc107; /* Gold */
+}
+
+.btn-dislike {
+    background-color: #dc3545; /* Red */
+}
+
+.btn-like i, .btn-super-like i, .btn-dislike i {
+    margin-right: 5px;
+}
+
+.review-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.post small {
+    display: block; /* Ensure it takes up the full width */
+    margin-bottom: 20px; /* Adjust the margin as needed */
+}
