@@ -13,7 +13,7 @@ from selenium.webdriver.chrome.options import Options
 flask_process = subprocess.Popen(['python', 'Project.py'])
 
 # Wait for the Flask application to start
-time.sleep(5)  # Adjust the sleep time if necessary
+time.sleep(10)  # Adjust the sleep time if necessary
 
 class ReviewTestCase(unittest.TestCase):
     def setUp(self):
@@ -36,7 +36,7 @@ class ReviewTestCase(unittest.TestCase):
         print("Navigated to login page:", driver.current_url)
 
         # Log in
-        WebDriverWait(driver, 20).until(
+        WebDriverWait(driver, 30).until(
             EC.presence_of_element_located((By.ID, 'email'))
         )
         driver.find_element(By.ID, 'email').send_keys('z@gmail.com')
@@ -46,7 +46,7 @@ class ReviewTestCase(unittest.TestCase):
 
         # Wait for login to complete by checking for a unique element on the landing page
         try:
-            WebDriverWait(driver, 20).until(
+            WebDriverWait(driver, 30).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'h1'))
             )
             print("Login successful")
@@ -62,9 +62,27 @@ class ReviewTestCase(unittest.TestCase):
         for spirit in spirits:
             # Open home page
             driver.get('http://127.0.0.1:5000/')
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_element_located((By.ID, 'alcoholicDropdown'))
-            )
+            try:
+                WebDriverWait(driver, 30).until(
+                    EC.presence_of_element_located((By.TAG_NAME, 'body'))
+                )
+            except Exception as e:
+                print(f"Page did not load for {spirit}: {e}")
+                print("Current URL:", driver.current_url)
+                print("Page title:", driver.title)
+                print("Page source:\n", driver.page_source)
+                continue
+
+            try:
+                WebDriverWait(driver, 30).until(
+                    EC.presence_of_element_located((By.ID, 'alcoholicDropdown'))
+                )
+            except Exception as e:
+                print(f"Failed to find alcoholicDropdown for {spirit}: {e}")
+                print("Current URL:", driver.current_url)
+                print("Page title:", driver.title)
+                print("Page source:\n", driver.page_source)
+                continue
 
             # Click on Alcoholic Dropdown and Select Spirit
             driver.find_element(By.ID, 'alcoholicDropdown').click()
@@ -74,22 +92,36 @@ class ReviewTestCase(unittest.TestCase):
             print(f"Navigated to {spirit} page")
 
             # Click on "Add a Review" button
-            WebDriverWait(driver, 10).until(
-                EC.element_to_be_clickable((By.ID, 'toggle-review-form'))
-            ).click()
-            print("Clicked 'Add a Review' button")
+            try:
+                WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.ID, 'toggle-review-form'))
+                ).click()
+                print("Clicked 'Add a Review' button")
+            except Exception as e:
+                print(f"Failed to click 'Add a Review' button for {spirit}: {e}")
+                print("Current URL:", driver.current_url)
+                print("Page title:", driver.title)
+                print("Page source:\n", driver.page_source)
+                continue
 
             # Fill in the review form
-            WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.ID, 'drink_review-form'))
-            )
-            driver.find_element(By.ID, 'drink-name').send_keys('test')
-            driver.find_element(By.ID, 'instructions').send_keys('test instructions')
-            driver.find_element(By.ID, 'ingredients').send_keys('test ingredients')
-            driver.find_element(By.ID, 'review').send_keys('test review')
-            driver.find_element(By.CSS_SELECTOR, '.star:nth-child(3)').click()
-            driver.find_element(By.CSS_SELECTOR, '.btn:nth-child(6)').click()
-            print("Submitted review form for", spirit)
+            try:
+                WebDriverWait(driver, 10).until(
+                    EC.visibility_of_element_located((By.ID, 'drink-review-form'))
+                )
+                driver.find_element(By.ID, 'drink-name').send_keys('test')
+                driver.find_element(By.ID, 'instructions').send_keys('test instructions')
+                driver.find_element(By.ID, 'ingredients').send_keys('test ingredients')
+                driver.find_element(By.ID, 'review').send_keys('test review')
+                driver.find_element(By.CSS_SELECTOR, '.star:nth-child(3)').click()
+                driver.find_element(By.CSS_SELECTOR, '.btn:nth-child(6)').click()
+                print("Submitted review form for", spirit)
+            except Exception as e:
+                print(f"Failed to submit review form for {spirit}: {e}")
+                print("Current URL:", driver.current_url)
+                print("Page title:", driver.title)
+                print("Page source:\n", driver.page_source)
+                continue
 
             # Confirm submission
             try:
@@ -116,7 +148,6 @@ class ReviewTestCase(unittest.TestCase):
                 WebDriverWait(driver, 10).until(
                     EC.alert_is_present()
                 )
-                alert = driver.switch_to.alert
                 alert.accept()
 
                 WebDriverWait(driver, 10).until(

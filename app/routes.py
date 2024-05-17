@@ -12,7 +12,7 @@ routes = Blueprint('routes', __name__)
 @routes.route('/')
 @login_required
 def home():
-    user = User.query.filter_by(username=session['username']).first()
+    user = User.query.filter_by(username=session.get('username')).first()
     if user:
         user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
         form = UploadAvatarForm()
@@ -205,6 +205,8 @@ def submit_review(drink_type):
 def delete_review(review_id):
     review = Post.query.get(review_id)
     if review and review.user_id == current_user.id:
+        # Delete reactions associated with the post
+        Reaction.query.filter_by(post_id=review.id).delete()
         db.session.delete(review)
         db.session.commit()
         return jsonify({'success': True}), 200

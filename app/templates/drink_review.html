@@ -67,13 +67,42 @@
                         </div>
                         <div class="review-content-container">
                             <p><strong>Drink Type:</strong> {{ review.drink_type |capitalize }}</p>
-                            <p><strong>Drink Name:</strong> {{ review.content.split(",")[0].split(":")[1].strip() }}</p>
-                            <p><strong>Rating:</strong> 
-                                <span class="review-rating" data-rating="{{ review.content.split(",")[1].split(":")[1].strip() }}"></span>
+                            {% set review_parts = review.content.split(",") %}
+                            <p><strong>Drink Name:</strong>
+                                {% if review_parts|length > 0 and review_parts[0].split(":")|length > 1 %}
+                                    {{ review_parts[0].split(":")[1].strip() }}
+                                {% else %}
+                                    Not available
+                                {% endif %}
                             </p>
-                            <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
-                            <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
-                            <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
+                            <p><strong>Rating:</strong>
+                                {% if review_parts|length > 1 and review_parts[1].split(":")|length > 1 %}
+                                    <span class="review-rating" data-rating="{{ review_parts[1].split(":")[1].strip() }}"></span>
+                                {% else %}
+                                    Not available
+                                {% endif %}
+                            </p>
+                            <p><strong>Instructions:</strong>
+                                {% if review_parts|length > 2 and review_parts[2].split(":")|length > 1 %}
+                                    {{ review_parts[2].split(":")[1].strip() }}
+                                {% else %}
+                                    Not available
+                                {% endif %}
+                            </p>
+                            <p><strong>Ingredients:</strong>
+                                {% if review_parts|length > 3 and review_parts[3].split(":")|length > 1 %}
+                                    {{ review_parts[3].split(":")[1].strip() }}
+                                {% else %}
+                                    Not available
+                                {% endif %}
+                            </p>
+                            <p><strong>Review:</strong>
+                                {% if review_parts|length > 4 and review_parts[4].split(":")|length > 1 %}
+                                    {{ review_parts[4].split(":")[1].strip() }}
+                                {% else %}
+                                    Not available
+                                {% endif %}
+                            </p>
                             <div class="review-buttons">
                                 <div>
                                     <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
