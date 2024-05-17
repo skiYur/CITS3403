@@ -44,6 +44,14 @@
         .form-container .btn {
             width: 100%;
         }
+        .avatar-img-small {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px; /* Add some space between the avatar and the username */
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -73,6 +81,7 @@
                     </li>
                     <li class="nav-item"><a class="nav-link restricted-link" href="/nonalcoholic">Non-alcoholic</a></li>
                     <li class="nav-item"><a class="nav-link restricted-link" href="/leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/popular-reviews">Popular Reviews</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
@@ -89,15 +98,13 @@
 
     <div class="container mt-3">
         <!-- Flash Messages -->
-        <div id="flash-message-container">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                  <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-              {% endif %}
-            {% endwith %}
-        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
 
         {% block content %}{% endblock %}
     </div>
