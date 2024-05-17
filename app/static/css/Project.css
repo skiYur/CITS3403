@@ -79,7 +79,6 @@ input, .btn {
     border-color: #bd2130;
 }
 
-
 /* Add to your CSS file (e.g., static/css/style.css) */
 .avatar-img-small {
     width: 30px;
@@ -105,10 +104,84 @@ input, .btn {
     color: white;
 }
 
+
+
+
+/* Review Styles */
+.review {
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+
+.review-body {
+    display: flex;
+    flex-direction: column; /* Change flex direction to column */
+    align-items: flex-start;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.review-header .avatar {
+    width: 50px !important; /* Ensure the avatar size */
+    height: 50px !important; /* Ensure the avatar size */
+    object-fit: cover !important; /* Ensure the image fits within the square */
+    border-radius: 50% !important; /* Makes the avatar circular */
+    margin-right: 10px !important;
+}
+
+.review-header strong {
+    font-size: 1.2em;
+    word-wrap: break-word;
+}
+
+.review-content-container {
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: normal;
+    display: inline-block;
+    overflow-wrap: break-word;
+}
+
+.review-content p {
+    margin: 5px 0;
+}
+
+/* Avatar search result */
 .avatar-search-result {
     width: 50px;
     height: 50px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 10px;
+}
+
+/* Review star rating styles */
+.star-rating {
+    font-size: 1.5em;
+    color: #ccc; /* Default color for empty stars */
+    cursor: pointer;
+}
+
+.star-rating .filled {
+    color: #ffcc00; /* Yellow color for filled stars */
+}
+
+.star-rating .hovered {
+    color: #ffcc00; /* Yellow color for hovered stars */
+}
+
+/* Review star rating styles */
+.review-rating .fas {
+    color: #ffcc00; /* Yellow/gold color for filled stars */
+}
+
+.review-rating .far {
+    color: #ccc; /* Light gray color for empty stars */
 }
