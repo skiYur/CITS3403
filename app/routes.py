@@ -160,10 +160,10 @@ def other():
         review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Other', reviews=recent_reviews)
 
-@routes.route('/nonalcoholic')
+@routes.route('/non_alcoholic')
 @login_required
-def nonalcoholic():
-    recent_reviews = Post.query.filter_by(drink_type='nonalcoholic').order_by(Post.created_at.desc()).all()
+def non_alcoholic():
+    recent_reviews = Post.query.filter_by(drink_type='non_alcoholic').order_by(Post.created_at.desc()).all()
     for review in recent_reviews:
         review.user = User.query.get(review.user_id)
     return render_template('drink_review.html', drink_type='Non-alcoholic', reviews=recent_reviews)
@@ -187,15 +187,18 @@ def submit_review(drink_type):
         flash('User not found', category='error')
         return redirect(url_for('routes.login'))
 
+    # Debugging statements
+    print(f"Submitting review for drink type: {drink_type}")
+    print(f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}")
+
     content = f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}"
-    new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower(), created_at=datetime.utcnow())
+    new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower().replace("-", "_"), created_at=datetime.utcnow())
     db.session.add(new_post)
     db.session.commit()
 
     flash('Review submitted successfully!', category='success')
     # Dynamically construct the endpoint name based on drink_type
-    return redirect(url_for(f'routes.{drink_type.lower()}'))
-
+    return redirect(url_for(f'routes.{drink_type.lower().replace("-", "_")}'))
 
 @routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
 @login_required
@@ -261,7 +264,6 @@ def search():
         flash('Enter a username to search', category='warning')
         return redirect(url_for('routes.home'))
 
-
 @routes.route('/upload_avatar', methods=['POST'])
 @login_required
 def upload_avatar():
@@ -293,7 +295,6 @@ def get_leaderboard_position():
     
     return jsonify({"position": position})
 
-
 @routes.route('/remove_avatar', methods=['POST'])
 @login_required
 def remove_avatar():
@@ -304,7 +305,6 @@ def remove_avatar():
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': False}), 404
-    
 
 @routes.route('/user/<username>')
 @login_required
