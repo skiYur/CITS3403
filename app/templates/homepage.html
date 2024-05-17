@@ -42,12 +42,14 @@
 
             <!-- Posts Box -->
             <div class="posts-box">
-                <h2>My Posts</h2>
+                <h2 style="margin-bottom: 30px;">My Posts</h2>
                 <div id="user-posts">
                     {% if user_posts %}
                         {% for post in user_posts %}
                             <div class="post">
+                                <small>Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                                 <div class="post-content">
+                                    <p><strong>Drink Type:</strong> {{ post.drink_type|capitalize }}</p>
                                     <p><strong>Drink Name:</strong> {{ post.content.split(",")[0].split(":")[1].strip() }}</p>
                                     <p><strong>Rating:</strong> 
                                         <span class="star-rating">
@@ -65,7 +67,7 @@
                                     <p><strong>Ingredients:</strong> {{ post.content.split(",")[3].split(":")[1].strip() }}</p>
                                     <p><strong>Review:</strong> {{ post.content.split(",")[4].split(":")[1].strip() }}</p>
                                 </div>
-                                <small>Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                
                             </div>
                         {% endfor %}
                     {% else %}

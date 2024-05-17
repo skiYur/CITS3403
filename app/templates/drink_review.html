@@ -3,7 +3,8 @@
 {% block title %}Drink Review{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/drink_review.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/project.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
 {% block content %}
@@ -18,8 +19,8 @@
     <!-- Drink Review Form -->
     <div class="row" id="review-form-container" style="display: none;">
         <div class="col-md-12">
-            <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink_review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
+            <h1>Add a {{ drink_type|capitalize }} Review</h1>
+            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
                     <input type="text" class="form-control form-control-custom" id="drink-name" name="drinkName" required>
@@ -38,7 +39,7 @@
                 </div>
                 <div class="form-group">
                     <label for="rating">Rating:</label><br>
-                    <div id="rating-stars">
+                    <div id="rating-stars" class="star-rating">
                         <i class="star far fa-star" data-value="1"></i>
                         <i class="star far fa-star" data-value="2"></i>
                         <i class="star far fa-star" data-value="3"></i>
@@ -55,7 +56,7 @@
     <!-- Display Drink Reviews -->
     <div class="row mt-4">
         <div class="col-md-12">
-            <h2>Recent Drink Reviews</h2>
+            <h2>Recent {{ drink_type|capitalize }} Drink Reviews</h2>
             <div id="drink-reviews">
                 {% for review in reviews %}
                 <div class="review">
@@ -65,7 +66,7 @@
                             <strong>{{ review.user.username }}</strong>
                         </div>
                         <div class="review-content-container">
-                            <p><strong>Drink Type:</strong> {{ review.drink_type }}</p>
+                            <p><strong>Drink Type:</strong> {{ review.drink_type |capitalize }}</p>
                             <p><strong>Drink Name:</strong> {{ review.content.split(",")[0].split(":")[1].strip() }}</p>
                             <p><strong>Rating:</strong> 
                                 <span class="review-rating" data-rating="{{ review.content.split(",")[1].split(":")[1].strip() }}"></span>
@@ -73,14 +74,26 @@
                             <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
                             <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
                             <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
-                            <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
-                            <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
-                            <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
-                            {% if review.user_id != session['user_id'] %}
-                            <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">Like</button>
-                            <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">Super Like</button>
-                            <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">Dislike</button>
-                            {% endif %}
+                            <div class="review-buttons">
+                                <div>
+                                    <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
+                                    <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">
+                                        <i class="fas fa-thumbs-up"></i> Like
+                                    </button>
+                                </div>
+                                <div>
+                                    <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
+                                    <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">
+                                        <i class="fas fa-heart"></i> Super Like
+                                    </button>
+                                </div>
+                                <div>
+                                    <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
+                                    <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">
+                                        <i class="fas fa-thumbs-down"></i> Dislike
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <small>Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
@@ -97,120 +110,5 @@
     </div>
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("drink_review-form");
-    const ratingStars = document.querySelectorAll("#rating-stars .star");
-
-    function highlightStars(selectedStar) {
-        ratingStars.forEach(star => {
-            if (parseInt(star.getAttribute("data-value")) <= selectedStar) {
-                star.classList.remove("far");
-                star.classList.add("fas");
-            } else {
-                star.classList.add("far");
-                star.classList.remove("fas");
-            }
-        });
-    }
-
-    ratingStars.forEach(star => {
-        star.addEventListener("click", function() {
-            const selectedStar = parseInt(this.getAttribute("data-value"));
-            document.getElementById("rating").value = selectedStar;
-            highlightStars(selectedStar);
-        });
-    });
-
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        const formData = new FormData(this);
-
-        fetch(this.action, {
-            method: 'POST',
-            body: formData
-        }).then(response => {
-            if (response.ok) {
-                console.log("Review submitted successfully");
-                window.location.reload();
-            } else {
-                console.error("Failed to submit the review");
-                alert("Failed to submit the review. Please try again.");
-            }
-        }).catch(error => {
-            console.error('Error submitting review:', error);
-            alert("Error submitting the review.");
-        });
-    });
-
-    window.deleteReview = function(reviewId) {
-        if (confirm('Are you sure you want to delete this review?')) {
-            fetch(`/delete_review/${reviewId}`, {
-                method: 'DELETE'
-            }).then(response => response.json())
-              .then(data => {
-                  if (data.success) {
-                      alert('Review deleted successfully');
-                      window.location.reload();
-                  } else {
-                      alert('Failed to delete review. Please try again.');
-                  }
-              }).catch(error => {
-                  console.error('Error deleting review:', error);
-                  alert('Error deleting the review.');
-              });
-        }
-    }
-
-    window.likePost = function(postId, action) {
-        fetch(`/like_post/${postId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ action: action })
-        }).then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  document.getElementById(`like-count-${postId}`).innerText = data.likes;
-                  document.getElementById(`super-like-count-${postId}`).innerText = data.super_likes;
-                  document.getElementById(`dislike-count-${postId}`).innerText = data.dislikes;
-              } else {
-                  alert(data.message);
-              }
-          }).catch(error => {
-              console.error('Error:', error);
-              alert('Error updating like status.');
-          });
-    }
-
-    function displayStars() {
-        const ratings = document.querySelectorAll('.review-rating');
-        ratings.forEach(rating => {
-            const ratingValue = parseInt(rating.getAttribute('data-rating'));
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement('i');
-                star.classList.add('fa-star');
-                if (i <= ratingValue) {
-                    star.classList.add('fas');
-                } else {
-                    star.classList.add('far');
-                }
-                rating.appendChild(star);
-            }
-        });
-    }
-
-    displayStars();
-
-    document.getElementById('toggle-review-form').addEventListener('click', function() {
-        var formContainer = document.getElementById('review-form-container');
-        if (formContainer.style.display === 'none' || formContainer.style.display === '') {
-            formContainer.style.display = 'block';
-        } else {
-            formContainer.style.display = 'none';
-        }
-    });
-});
-</script>
+<script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>
 {% endblock %}

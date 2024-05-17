@@ -1,5 +1,3 @@
-<!-- search_results.html -->
-
 {% extends "base.html" %}
 
 {% block title %}Search Results{% endblock %}
@@ -7,9 +5,10 @@
 {% block head %}
 <style>
     .avatar-search-result {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
+        width: 50px;  /* Adjust width as needed */
+        height: 50px; /* Adjust height as needed */
+        object-fit: cover; /* Ensure the image fits within the square */
+        border-radius: 50%; /* Makes the avatar circular */
         margin-right: 10px;
     }
 </style>

@@ -7,14 +7,35 @@ document.addEventListener("DOMContentLoaded", function() {
             if (parseInt(star.getAttribute("data-value")) <= selectedStar) {
                 star.classList.remove("far");
                 star.classList.add("fas");
+                star.classList.add("filled");
             } else {
                 star.classList.add("far");
                 star.classList.remove("fas");
+                star.classList.remove("filled");
             }
         });
     }
 
+    function resetStars() {
+        ratingStars.forEach(star => {
+            star.classList.remove("hovered");
+            star.classList.remove("filled");
+        });
+    }
+
     ratingStars.forEach(star => {
+        star.addEventListener("mouseover", function() {
+            resetStars();
+            highlightStars(this.dataset.value);
+        });
+
+        star.addEventListener("mouseout", function() {
+            resetStars();
+            if (document.getElementById("rating").value) {
+                highlightStars(document.getElementById("rating").value);
+            }
+        });
+
         star.addEventListener("click", function() {
             const selectedStar = parseInt(this.getAttribute("data-value"));
             document.getElementById("rating").value = selectedStar;
@@ -81,6 +102,25 @@ document.addEventListener("DOMContentLoaded", function() {
               alert('Error updating like status.');
           });
     }
+
+    function displayStars() {
+        const ratings = document.querySelectorAll('.review-rating');
+        ratings.forEach(rating => {
+            const ratingValue = parseInt(rating.getAttribute('data-rating'));
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('i');
+                star.classList.add('fa-star');
+                if (i <= ratingValue) {
+                    star.classList.add('fas');
+                } else {
+                    star.classList.add('far');
+                }
+                rating.appendChild(star);
+            }
+        });
+    }
+
+    displayStars();
 
     document.getElementById('toggle-review-form').addEventListener('click', function() {
         var formContainer = document.getElementById('review-form-container');

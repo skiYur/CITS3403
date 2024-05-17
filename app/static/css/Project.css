@@ -79,7 +79,6 @@ input, .btn {
     border-color: #bd2130;
 }
 
-
 /* Add to your CSS file (e.g., static/css/style.css) */
 .avatar-img-small {
     width: 30px;
@@ -103,4 +102,127 @@ input, .btn {
 .flash-message.alert-warning {
     background-color: orange;
     color: white;
+}
+
+
+
+
+/* Review Styles */
+.review {
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+
+.review-body {
+    display: flex;
+    flex-direction: column; /* Change flex direction to column */
+    align-items: flex-start;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.review-header .avatar {
+    width: 50px !important; /* Ensure the avatar size */
+    height: 50px !important; /* Ensure the avatar size */
+    object-fit: cover !important; /* Ensure the image fits within the square */
+    border-radius: 50% !important; /* Makes the avatar circular */
+    margin-right: 10px !important;
+}
+
+.review-header strong {
+    font-size: 1.2em;
+    word-wrap: break-word;
+}
+
+.review-content-container {
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: normal;
+    display: inline-block;
+    overflow-wrap: break-word;
+}
+
+.review-content p {
+    margin: 5px 0;
+}
+
+/* Avatar search result */
+.avatar-search-result {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Review star rating styles */
+.star-rating {
+    font-size: 1.5em;
+    color: #ccc; /* Default color for empty stars */
+    cursor: pointer;
+}
+
+.star-rating .filled {
+    color: #ffcc00; /* Yellow color for filled stars */
+}
+
+.star-rating .hovered {
+    color: #ffcc00; /* Yellow color for hovered stars */
+}
+
+/* Review star rating styles */
+.review-rating .fas {
+    color: #ffcc00; /* Yellow/gold color for filled stars */
+}
+
+.review-rating .far {
+    color: #ccc; /* Light gray color for empty stars */
+}
+
+
+.btn-like, .btn-super-like, .btn-dislike {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px; /* Adjust padding for smaller size */
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-like {
+    background-color: #007bff; /* Blue */
+}
+
+.btn-super-like {
+    background-color: #ffc107; /* Gold */
+}
+
+.btn-dislike {
+    background-color: #dc3545; /* Red */
+}
+
+.btn-like i, .btn-super-like i, .btn-dislike i {
+    margin-right: 5px;
+}
+
+.review-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.post small {
+    display: block; /* Ensure it takes up the full width */
+    margin-bottom: 20px; /* Adjust the margin as needed */
 }

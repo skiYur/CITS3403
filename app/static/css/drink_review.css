@@ -1,3 +1,4 @@
+
 .review {
     padding-top: 20px;
     margin-bottom: 30px;
@@ -18,10 +19,11 @@
 }
 
 .review-header .avatar {
-    width: 30px; /* Make the avatar smaller */
-    height: 30px; /* Make the avatar smaller */
-    border-radius: 50%;
-    margin-right: 10px;
+    width: 50px !important; /* Adjust width to match the search result avatar */
+    height: 50px !important; /* Adjust height to match the search result avatar */
+    object-fit: cover !important; /* Ensure the image fits within the square */
+    border-radius: 50% !important; /* Makes the avatar circular */
+    margin-right: 10px !important;
 }
 
 .review-header strong {
