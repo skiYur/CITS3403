@@ -19,7 +19,7 @@
     <div class="row" id="review-form-container" style="display: none;">
         <div class="col-md-12">
             <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
+            <form id="drink_review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
                     <input type="text" class="form-control form-control-custom" id="drink-name" name="drinkName" required>
@@ -99,7 +99,7 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("drink-review-form");
+    const form = document.getElementById("drink_review-form");
     const ratingStars = document.querySelectorAll("#rating-stars .star");
 
     function highlightStars(selectedStar) {
@@ -131,8 +131,10 @@ document.addEventListener("DOMContentLoaded", function() {
             body: formData
         }).then(response => {
             if (response.ok) {
+                console.log("Review submitted successfully");
                 window.location.reload();
             } else {
+                console.error("Failed to submit the review");
                 alert("Failed to submit the review. Please try again.");
             }
         }).catch(error => {

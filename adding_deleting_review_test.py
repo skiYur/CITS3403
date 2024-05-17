@@ -81,7 +81,7 @@ class ReviewTestCase(unittest.TestCase):
 
             # Fill in the review form
             WebDriverWait(driver, 10).until(
-                EC.visibility_of_element_located((By.ID, 'drink-review-form'))
+                EC.visibility_of_element_located((By.ID, 'drink_review-form'))
             )
             driver.find_element(By.ID, 'drink-name').send_keys('test')
             driver.find_element(By.ID, 'instructions').send_keys('test instructions')
