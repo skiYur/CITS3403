@@ -11,8 +11,11 @@ html, body {
 
 /* Navigation bar settings */
 .navbar-nav {
-    background-color: #FFFFFF;
+    background-color: #FFFF;
 }
+
+
+
 
 /* Content settings */
 .container-fluid {
@@ -79,7 +82,8 @@ input, .btn {
     border-color: #bd2130;
 }
 
-/* Add to your CSS file (e.g., static/css/style.css) */
+
+
 .avatar-img-small {
     width: 30px;
     height: 30px;
@@ -103,6 +107,10 @@ input, .btn {
     background-color: orange;
     color: white;
 }
+
+
+
+
 
 
 
@@ -229,8 +237,12 @@ input, .btn {
 
 
 
+
+
+
+
 /*LOGIN PAGE CSS*/
-/* Container for the login page */
+/* Container for the login and signup pages */
 .container-fluid {
     display: flex;
     height: 100vh;
@@ -252,7 +264,6 @@ input, .btn {
     background-color: #f7f7f7;
     padding: 20px;
     text-align: center;
-    height: 100%;
 }
 
 .welcome-text {
@@ -261,26 +272,27 @@ input, .btn {
 
 .drink-logo {
     margin-top: 20px;
-    width: 200px; /* Adjust the logo size */
+    width: 150px; /* Adjust the logo size */
 }
 
-/* Right side login container */
-.login-container {
+/* Right side login and signup containers */
+.login-container, .signup-container {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     background-color: #004d4d;
     padding: 20px;
-    color: rgb(255, 255, 255);
+    color: white;
     height: 100%;
 }
 
-.login-container h2 {
+.login-container h2, .signup-container h2 {
     margin-bottom: 20px;
 }
 
 /* Divider */
-.welcome-container + .login-container {
-    border-left: 1px solid #004d4d;;
+.welcome-container + .login-container,
+.welcome-container + .signup-container {
+    border-left: 1px solid #ccc;
 }

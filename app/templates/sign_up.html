@@ -2,50 +2,57 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-<div class="signuppage-container form-container">
-    <div class="welcome-container" style="text-align:center; margin-bottom: 20px;">
-        <h1>Join Drinks Reviews</h1>
-        <p>Create an account to find and share drink reviews with a community that loves drinks as much as you do!</p>
-    </div>
+<div class="container-fluid">
+    <div class="row no-gutters">
+        <!-- Left Side - Welcome Message and Logo -->
+        <div class="col-md-6 welcome-container">
+            <div class="welcome-text">
+                <h1>Join Mix'd Opinions</h1>
+                <p>Create an account to find and share drink reviews with a community that loves drinks as much as you do!</p>
+                <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Drink Logo" class="drink-logo">
+            </div>
+        </div>
 
-    <div class="signup-container">
-        <h2 class="text-center">Create your account!</h2>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="container">
-                    {% for category, message in messages %}
-                        <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+        <!-- Right Side - Sign Up Form -->
+        <div class="col-md-6 signup-container">
+            <h2 class="text-center">Create your account!</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="container">
+                        {% for category, message in messages %}
+                            <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form id="sign-up-form" action="/register" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Enter your username" required>
                 </div>
-            {% endif %}
-        {% endwith %}
-        <form id="sign-up-form" action="/register" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" class="form-control mb-3" id="username" name="username" placeholder="Enter your username" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control mb-3" id="email" name="email" placeholder="Enter your email" required>
-            </div>
-            <div class="form-group">
-                <label for="password1">Password</label>
-                <input type="password" class="form-control mb-3" id="password1" name="password1" placeholder="Enter Password" required>
-                <small id="passwordHelpBlock" class="form-text text-muted">
-                    Your password must be at least 8 characters long, contain an uppercase letter, and a special character.
-                </small>
-            </div>
-            <div class="form-group">
-                <label for="password2">Confirm Password</label>
-                <input type="password" class="form-control mb-3" id="password2" name="password2" placeholder="Confirm Password" required>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary mb-2">Sign Up</button>
-                <br />
-                <hr />
-                <p>Already have an account? <a id="login" href="/login">Login here</a></p>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control mb-3" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control mb-3" id="password1" name="password1" placeholder="Enter Password" required>
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        Your password must be at least 8 characters long, contain an uppercase letter, and a special character.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" class="form-control mb-3" id="password2" name="password2" placeholder="Confirm Password" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary mb-2">Sign Up</button>
+                    <br />
+                    <hr />
+                    <p>Already have an account? <a id="login" href="/login">Login here</a></p>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
