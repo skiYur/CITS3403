@@ -18,10 +18,10 @@
 }
 
 .review-header .avatar {
-    width: 10px; /* Make the avatar smaller */
-    height: 10px; /* Make the avatar smaller */
+    width: 30px; /* Make the avatar smaller */
+    height: 30px; /* Make the avatar smaller */
     border-radius: 50%;
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .review-header strong {

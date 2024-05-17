@@ -193,7 +193,8 @@ def submit_review(drink_type):
     db.session.commit()
 
     flash('Review submitted successfully!', category='success')
-    return redirect(url_for(f'routes.{drink_type.lower()}'))
+    return redirect(url_for(f'routes.reviews', drink_type=drink_type.lower()))
+
 
 @routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
 @login_required
