@@ -19,7 +19,7 @@
     <!-- Drink Review Form -->
     <div class="row" id="review-form-container" style="display: none;">
         <div class="col-md-12">
-            <h1>Add a {{ drink_type|capitalize }} Review</h1>
+            <h1>Add a {{ drink_type|replace('_', '-')|capitalize }} Review</h1>
             <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
@@ -56,7 +56,7 @@
     <!-- Display Drink Reviews -->
     <div class="row mt-4">
         <div class="col-md-12">
-            <h2>Recent {{ drink_type|capitalize }} Drink Reviews</h2>
+            <h2>Recent {{ drink_type|replace('_', '-')|capitalize }} Drink Reviews</h2>
             <div id="drink-reviews">
                 {% for review in reviews %}
                 <div class="review">
@@ -66,66 +66,33 @@
                             <strong>{{ review.user.username }}</strong>
                         </div>
                         <div class="review-content-container">
-                            <p><strong>Drink Type:</strong> {{ review.drink_type |capitalize }}</p>
-                            {% set review_parts = review.content.split(",") %}
-                            <p><strong>Drink Name:</strong>
-                                {% if review_parts|length > 0 and review_parts[0].split(":")|length > 1 %}
-                                    {{ review_parts[0].split(":")[1].strip() }}
-                                {% else %}
-                                    Not available
-                                {% endif %}
+                            <p><strong>Drink Type:</strong> {{ review.drink_type|replace('_', '-')|capitalize }}</p>
+                            <p><strong>Drink Name:</strong> {{ review.content.split(",")[0].split(":")[1].strip() }}</p>
+                            <p><strong>Rating:</strong> 
+                                <span class="review-rating" data-rating="{{ review.content.split(",")[1].split(":")[1].strip() }}"></span>
                             </p>
-                            <p><strong>Rating:</strong>
-                                {% if review_parts|length > 1 and review_parts[1].split(":")|length > 1 %}
-                                    <span class="review-rating" data-rating="{{ review_parts[1].split(":")[1].strip() }}"></span>
-                                {% else %}
-                                    Not available
-                                {% endif %}
-                            </p>
-                            <p><strong>Instructions:</strong>
-                                {% if review_parts|length > 2 and review_parts[2].split(":")|length > 1 %}
-                                    {{ review_parts[2].split(":")[1].strip() }}
-                                {% else %}
-                                    Not available
-                                {% endif %}
-                            </p>
-                            <p><strong>Ingredients:</strong>
-                                {% if review_parts|length > 3 and review_parts[3].split(":")|length > 1 %}
-                                    {{ review_parts[3].split(":")[1].strip() }}
-                                {% else %}
-                                    Not available
-                                {% endif %}
-                            </p>
-                            <p><strong>Review:</strong>
-                                {% if review_parts|length > 4 and review_parts[4].split(":")|length > 1 %}
-                                    {{ review_parts[4].split(":")[1].strip() }}
-                                {% else %}
-                                    Not available
-                                {% endif %}
-                            </p>
+                            <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
+                            <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
+                            <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
+                            <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
+                            <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
+                            <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
+                            {% if review.user_id != session['user_id'] %}
                             <div class="review-buttons">
-                                <div>
-                                    <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
-                                    <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">
-                                        <i class="fas fa-thumbs-up"></i> Like
-                                    </button>
-                                </div>
-                                <div>
-                                    <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
-                                    <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">
-                                        <i class="fas fa-heart"></i> Super Like
-                                    </button>
-                                </div>
-                                <div>
-                                    <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
-                                    <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">
-                                        <i class="fas fa-thumbs-down"></i> Dislike
-                                    </button>
-                                </div>
+                                <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">
+                                    <i class="fas fa-thumbs-up"></i> Like
+                                </button>
+                                <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">
+                                    <i class="fas fa-heart"></i> Super Like
+                                </button>
+                                <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">
+                                    <i class="fas fa-thumbs-down"></i> Dislike
+                                </button>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
-                    <small>Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    <small class="post-time" data-time="{{ review.created_at.isoformat() }}">Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                     <small>Review ID: {{ review.id }}</small>
                     {% if review.user_id == session['user_id'] %}
                         <button onclick="deleteReview('{{ review.id }}')" class="btn btn-danger">
@@ -140,4 +107,15 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Convert server time to local time
+        const postTimes = document.querySelectorAll('.post-time');
+        postTimes.forEach(function(postTime) {
+            const serverTime = new Date(postTime.getAttribute('data-time') + 'Z');
+            const localTime = serverTime.toLocaleString();
+            postTime.textContent = `Posted on ${localTime}`;
+        });
+    });
+</script>
 {% endblock %}

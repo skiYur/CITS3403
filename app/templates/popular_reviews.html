@@ -45,12 +45,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 const ratingStars = Array(rating).fill('<i class="fas fa-star"></i>').join('') + 
                                     Array(5 - rating).fill('<i class="far fa-star"></i>').join('');
 
+                const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+                const formatDrinkType = (type) => capitalize(type.replace(/_/g, '-'));
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <th scope="row">${index + 1}</th>
                     <td><img src="${review.avatar}" alt="Avatar" class="avatar-img-small"> <a href="{{ url_for('routes.user_profile', username='') }}${review.username}">${review.username}</a></td>
-                    <td>${review.drink_type}</td>
+                    <td>${formatDrinkType(review.drink_type)}</td>
                     <td class="review-content">
+                        <p><strong>Drink Type:</strong> ${formatDrinkType(review.drink_type)}</p>
                         <p><strong>Drink Name:</strong> ${drinkName}</p>
                         <p><strong>Rating:</strong> <span class="star-rating">${ratingStars}</span></p>
                         <p><strong>Instructions:</strong> ${instructions}</p>
