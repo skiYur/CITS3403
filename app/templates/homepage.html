@@ -1,5 +1,3 @@
-<!-- homepage.html -->
-
 {% extends "base.html" %}
 
 {% block title %}Homepage{% endblock %}
@@ -20,12 +18,12 @@
                 <input type="file" id="avatar-input" name="avatar" style="display: none;" accept="image/*">
             </form>
         </div>
-        <div class="username">{{ user.username }}</div> <!-- Display the username next to the avatar -->
+        <div class="username">{{ user.username }}</div> <!-- display the username next to the avatar -->
     </div>
 
     <div class="user-info">
         <h1>Welcome, {{ user.username }}!</h1>
-        <p>Customise your profile and see your activities here.</p>
+        <p>Customise your profile and see your activities/insights here.</p>
         <button class="btn btn-danger" onclick="removeAvatar()">Remove Avatar</button>
     </div>
 
@@ -38,6 +36,7 @@
                 <p>Email: <span class="email">{{ user.email }}</span></p> <!-- Added email line -->
                 <p>Date Joined: <span class="date-joined">{{ user.created_at.strftime('%Y-%m-%d') }}</span></p>
                 <p>Leaderboard Position: <span class="leaderboard-pos" id="leaderboard-pos">Loading...</span></p>
+                <p>Total Reviews: <span class="total-reviews">{{ user_posts|length }}</span></p> <!-- Added total reviews line -->
             </div>
 
             <!-- Posts Box -->
@@ -47,9 +46,9 @@
                     {% if user_posts %}
                         {% for post in user_posts %}
                             <div class="post">
-                                <small>Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                                <small class="post-time" data-time="{{ post.created_at.isoformat() }}">Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
                                 <div class="post-content">
-                                    <p><strong>Drink Type:</strong> {{ post.drink_type|capitalize }}</p>
+                                    <p><strong>Drink Type:</strong> {{ post.drink_type|replace('_', '-')|capitalize }}</p>
                                     <p><strong>Drink Name:</strong> {{ post.content.split(",")[0].split(":")[1].strip() }}</p>
                                     <p><strong>Rating:</strong> 
                                         <span class="star-rating">
@@ -67,7 +66,6 @@
                                     <p><strong>Ingredients:</strong> {{ post.content.split(",")[3].split(":")[1].strip() }}</p>
                                     <p><strong>Review:</strong> {{ post.content.split(",")[4].split(":")[1].strip() }}</p>
                                 </div>
-                                
                             </div>
                         {% endfor %}
                     {% else %}
@@ -81,6 +79,14 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        // Convert server time to local time
+        const postTimes = document.querySelectorAll('.post-time');
+        postTimes.forEach(function(postTime) {
+            const serverTime = new Date(postTime.getAttribute('data-time') + 'Z');
+            const localTime = serverTime.toLocaleString();
+            postTime.textContent = `Posted on ${localTime}`;
+        });
+
         // Fetch the leaderboard position and update the leaderboard position
         fetch("{{ url_for('routes.get_leaderboard_position') }}")
             .then(response => response.json())
