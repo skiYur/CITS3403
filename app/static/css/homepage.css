@@ -3,7 +3,6 @@ body {
     background-color: #f4f4f4;
 }
 
-
 .category-list .list-group-item {
     background-color: transparent;
     color: white;
@@ -26,7 +25,7 @@ body {
 
 /* Insights and posts container */
 .insights-posts-container {
-    padding:50px;
+    padding: 50px;
     display: flex;
     gap: 50px; /* Space between the two boxes */
 }
@@ -49,6 +48,29 @@ body {
     border: 2px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post-content {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word; /* Ensure long words are wrapped */
+    overflow: hidden; /* Hide overflow content */
+}
+
+.post {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.star-rating {
+    display: inline-block;
+}
+
+.star-rating .fa-star {
+    color: #FFD700; /* Gold color for stars */
 }
 
 /* Banner and avatar styles */

@@ -3,7 +3,7 @@
 {% block title %}Drink Review{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reviews.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/drink_review.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -19,22 +19,22 @@
     <div class="row" id="review-form-container" style="display: none;">
         <div class="col-md-12">
             <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type.replace('-', '').replace('/', '')) }}">
+            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
-                    <input type="text" class="form-control" id="drink-name" name="drinkName" required>
+                    <input type="text" class="form-control form-control-custom" id="drink-name" name="drinkName" required>
                 </div>
                 <div class="form-group">
                     <label for="instructions">Instructions:</label>
-                    <textarea class="form-control" rows="3" id="instructions" name="instructions"></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="instructions" name="instructions"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="ingredients">Ingredients:</label>
-                    <textarea class="form-control" rows="3" id="ingredients" name="ingredients"></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="ingredients" name="ingredients"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="review">Review:</label>
-                    <textarea class="form-control" rows="3" id="review" name="review" required></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="review" name="review" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="rating">Rating:</label><br>
@@ -47,7 +47,7 @@
                     </div>
                     <input type="hidden" id="rating" name="rating" value="0">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <button type="submit" class="btn btn-primary btn-custom">Submit Review</button>
             </form>
         </div>
     </div>
@@ -64,9 +64,12 @@
                             <img src="{{ url_for('static', filename=review.user.avatar) }}" alt="{{ review.user.username }}'s avatar" class="avatar">
                             <strong>{{ review.user.username }}</strong>
                         </div>
-                        <div class="review-content">
+                        <div class="review-content-container">
+                            <p><strong>Drink Type:</strong> {{ review.drink_type }}</p>
                             <p><strong>Drink Name:</strong> {{ review.content.split(",")[0].split(":")[1].strip() }}</p>
-                            <p><strong>Rating:</strong> {{ review.content.split(",")[1].split(":")[1].strip() }}</p>
+                            <p><strong>Rating:</strong> 
+                                <span class="review-rating" data-rating="{{ review.content.split(",")[1].split(":")[1].strip() }}"></span>
+                            </p>
                             <p><strong>Instructions:</strong> {{ review.content.split(",")[2].split(":")[1].strip() }}</p>
                             <p><strong>Ingredients:</strong> {{ review.content.split(",")[3].split(":")[1].strip() }}</p>
                             <p><strong>Review:</strong> {{ review.content.split(",")[4].split(":")[1].strip() }}</p>
@@ -178,6 +181,25 @@ document.addEventListener("DOMContentLoaded", function() {
               alert('Error updating like status.');
           });
     }
+
+    function displayStars() {
+        const ratings = document.querySelectorAll('.review-rating');
+        ratings.forEach(rating => {
+            const ratingValue = parseInt(rating.getAttribute('data-rating'));
+            for (let i = 1; i <= 5; i++) {
+                const star = document.createElement('i');
+                star.classList.add('fa-star');
+                if (i <= ratingValue) {
+                    star.classList.add('fas');
+                } else {
+                    star.classList.add('far');
+                }
+                rating.appendChild(star);
+            }
+        });
+    }
+
+    displayStars();
 
     document.getElementById('toggle-review-form').addEventListener('click', function() {
         var formContainer = document.getElementById('review-form-container');

@@ -193,7 +193,8 @@ def submit_review(drink_type):
     db.session.commit()
 
     flash('Review submitted successfully!', category='success')
-    return redirect(url_for(f'routes.{drink_type.lower()}'))
+    return redirect(url_for(f'routes.reviews', drink_type=drink_type.lower()))
+
 
 @routes.route('/delete_review/<int:review_id>', methods=['DELETE'])
 @login_required
@@ -315,3 +316,24 @@ def user_profile(username):
     user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
     return render_template('user_profile.html', user=user, user_posts=user_posts)
 
+@routes.route('/api/popular_reviews')
+def api_popular_reviews():
+    reviews = Post.query.order_by((Post.likes + Post.super_likes).desc()).all()
+    popular_reviews = [
+        {
+            "username": User.query.get(review.user_id).username,
+            "avatar": url_for('static', filename=User.query.get(review.user_id).avatar),
+            "drink_type": review.drink_type,
+            "content": review.content,
+            "likes": review.likes,
+            "super_likes": review.super_likes,
+            "total_likes": review.likes + review.super_likes
+        }
+        for review in reviews
+    ]
+    return jsonify(popular_reviews)
+
+@routes.route('/popular-reviews')
+@login_required
+def popular_reviews():
+    return render_template('popular_reviews.html')
