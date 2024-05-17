@@ -89,3 +89,18 @@ input, .btn {
     margin-right: 10px; /* Add some space between the avatar and the username */
     vertical-align: middle;
 }
+
+.flash-message.alert-success {
+    background-color: green;
+    color: white;
+}
+
+.flash-message.alert-danger {
+    background-color: red;
+    color: white;
+}
+
+.flash-message.alert-warning {
+    background-color: orange;
+    color: white;
+}

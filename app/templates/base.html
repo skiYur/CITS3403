@@ -8,6 +8,43 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .navbar-nav .form-inline .form-control {
+            width: auto;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .navbar-nav .form-inline .btn {
+            width: auto;
+            display: inline-block;
+        }
+        .flash-message.alert-success {
+            background-color: green;
+            color: white;
+        }
+        .flash-message.alert-danger {
+            background-color: red;
+            color: white;
+        }
+        .flash-message.alert-warning {
+            background-color: orange;
+            color: white;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 150px); /* Adjust height to center the form */
+        }
+        .form-container .form-group {
+            width: 100%;
+            max-width: 300px;
+        }
+        .form-container .btn {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -52,13 +89,15 @@
 
     <div class="container mt-3">
         <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
+        <div id="flash-message-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
 
         {% block content %}{% endblock %}
     </div>
