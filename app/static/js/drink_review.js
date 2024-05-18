@@ -103,6 +103,60 @@ document.addEventListener("DOMContentLoaded", function() {
           });
     }
 
+    // Search reviews function
+    window.searchReviews = function(event) {
+        event.preventDefault();
+        const query = document.getElementById("search-input").value;
+
+        fetch(`/search_reviews?drink_type=${encodeURIComponent(drinkType)}&query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayReviews(data.reviews);
+                } else {
+                    alert('No reviews found.');
+                }
+            }).catch(error => {
+                console.error('Error fetching reviews:', error);
+                alert('Error fetching reviews.');
+            });
+    }
+
+    // Display reviews function
+    function displayReviews(reviews) {
+        const reviewsContainer = document.getElementById('drink-reviews');
+        reviewsContainer.innerHTML = '';
+        reviews.forEach(review => {
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('review');
+            reviewElement.innerHTML = `
+                <div class="review-body">
+                    <div class="review-header">
+                        <img src="${review.user_avatar}" alt="${review.user_username}'s avatar" class="avatar">
+                        <strong>${review.user_username}</strong>
+                    </div>
+                    <div class="review-content-container">
+                        <p><strong>Drink Type:</strong> ${review.drink_type}</p>
+                        <p><strong>Drink Name:</strong> ${review.drink_name}</p>
+                        <p><strong>Rating:</strong> <span class="review-rating" data-rating="${review.rating}"></span></p>
+                        <p><strong>Instructions:</strong> ${review.instructions}</p>
+                        <p><strong>Ingredients:</strong> ${review.ingredients}</p>
+                        <p><strong>Review:</strong> ${review.content}</p>
+                        <p><strong>Likes:</strong> <span id="like-count-${review.id}">${review.likes}</span></p>
+                        <p><strong>Super Likes:</strong> <span id="super-like-count-${review.id}">${review.super_likes}</span></p>
+                        <p><strong>Dislikes:</strong> <span id="dislike-count-${review.id}">${review.dislikes}</span></p>
+                    </div>
+                </div>
+                <small class="post-time" data-time="${review.created_at}">Posted on ${new Date(review.created_at).toLocaleString()}</small>
+                <small>Review ID: ${review.id}</small>
+                ${review.user_id === session_user_id ? `<button onclick="deleteReview('${review.id}')" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>` : ''}
+            `;
+            reviewsContainer.appendChild(reviewElement);
+        });
+        displayStars();
+    }
+
+    // Display stars function
     function displayStars() {
         const ratings = document.querySelectorAll('.review-rating');
         ratings.forEach(rating => {
@@ -120,14 +174,17 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    displayStars();
+    // Convert server time to local time (existing code)
+    const postTimes = document.querySelectorAll('.post-time');
+    postTimes.forEach(function(postTime) {
+        const serverTime = new Date(postTime.getAttribute('data-time') + 'Z');
+        const localTime = serverTime.toLocaleString();
+        postTime.textContent = `Posted on ${localTime}`;
+    });
 
+    // Toggle review form visibility
     document.getElementById('toggle-review-form').addEventListener('click', function() {
-        var formContainer = document.getElementById('review-form-container');
-        if (formContainer.style.display === 'none' || formContainer.style.display === '') {
-            formContainer.style.display = 'block';
-        } else {
-            formContainer.style.display = 'none';
-        }
+        const formContainer = document.getElementById('review-form-container');
+        formContainer.style.display = formContainer.style.display === 'none' || formContainer.style.display === '' ? 'block' : 'none';
     });
 });

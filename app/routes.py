@@ -136,7 +136,6 @@ def rum():
         review.user = User.query.get(review.user_id)   
     return render_template('drink_review.html', drink_type='Rum', reviews=recent_reviews)
 
-
 @routes.route('/tequila')
 @login_required
 def tequila():
@@ -337,3 +336,39 @@ def api_popular_reviews():
 @login_required
 def popular_reviews():
     return render_template('popular_reviews.html')
+
+@routes.route('/search_reviews')
+@login_required
+def search_reviews():
+    drink_type = request.args.get('drink_type')
+    query = request.args.get('query')
+    if not drink_type or not query:
+        return jsonify({'success': False, 'message': 'Invalid search parameters.'})
+
+    reviews = Post.query.filter(
+        Post.drink_type == drink_type,
+        Post.content.ilike(f'%{query}%')
+    ).all()
+
+    reviews_data = []
+    for review in reviews:
+        reviews_data.append({
+            'id': review.id,
+            'user_id': review.user_id,
+            'user_username': review.author.username,
+            'user_avatar': url_for('static', filename=review.author.avatar),
+            'drink_type': review.drink_type.replace('_', '-').capitalize(),
+            'drink_name': review.content.split(',')[0].split(':')[1].strip() if ':' in review.content.split(',')[0] else 'N/A',
+            'rating': review.content.split(',')[1].split(':')[1].strip() if ':' in review.content.split(',')[1] else 0,
+            'instructions': review.content.split(',')[2].split(':')[1].strip() if ':' in review.content.split(',')[2] else 'N/A',
+            'ingredients': review.content.split(',')[3].split(':')[1].strip() if ':' in review.content.split(',')[3] else 'N/A',
+            'content': review.content.split(',')[4].split(':')[1].strip() if ':' in review.content.split(',')[4] else 'N/A',
+            'likes': review.likes,
+            'super_likes': review.super_likes,
+            'dislikes': review.dislikes,
+            'created_at': review.created_at.isoformat()
+        })
+
+    return jsonify({'success': True, 'reviews': reviews_data})
+
+

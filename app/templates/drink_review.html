@@ -53,10 +53,14 @@
         </div>
     </div>
 
-    <!-- Display Drink Reviews -->
+    <!-- Search Form and Display Drink Reviews -->
     <div class="row mt-4">
         <div class="col-md-12">
             <h2>Recent {{ drink_type|replace('_', '-')|capitalize }} Drink Reviews</h2>
+            <form id="search-form" class="form-inline mb-3" onsubmit="searchReviews(event)">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Reviews" aria-label="Search" id="search-input" required>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
             <div id="drink-reviews">
                 {% for review in reviews %}
                 <div class="review">
@@ -122,5 +126,8 @@
             postTime.textContent = `Posted on ${localTime}`;
         });
     });
+</script>
+<script>
+    const drinkType = "{{ drink_type }}";
 </script>
 {% endblock %}
