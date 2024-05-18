@@ -133,8 +133,9 @@ def gin():
 def rum():
     recent_reviews = Post.query.filter_by(drink_type='rum').order_by(Post.created_at.desc()).all()
     for review in recent_reviews:
-        review.user = User.query.get(review.user_id)
+        review.user = User.query.get(review.user_id)   
     return render_template('drink_review.html', drink_type='Rum', reviews=recent_reviews)
+
 
 @routes.route('/tequila')
 @login_required
@@ -186,10 +187,6 @@ def submit_review(drink_type):
     if not user:
         flash('User not found', category='error')
         return redirect(url_for('routes.login'))
-
-    # Debugging statements
-    print(f"Submitting review for drink type: {drink_type}")
-    print(f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}")
 
     content = f"Drink Name: {drink_name}, Rating: {rating}, Instructions: {instructions}, Ingredients: {ingredients}, Review: {review_text}"
     new_post = Post(content=content, user_id=user.id, drink_type=drink_type.lower().replace("-", "_"), created_at=datetime.utcnow())
