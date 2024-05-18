@@ -1,0 +1,44 @@
+
+.review {
+    padding-top: 20px;
+    margin-bottom: 30px;
+}
+
+.review-body {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.review-header .avatar {
+    width: 50px !important; /* Adjust width to match the search result avatar */
+    height: 50px !important; /* Adjust height to match the search result avatar */
+    object-fit: cover !important; /* Ensure the image fits within the square */
+    border-radius: 50% !important; /* Makes the avatar circular */
+    margin-right: 10px !important;
+}
+
+.review-header strong {
+    font-size: 1.2em;
+    word-wrap: break-word;
+}
+
+.review-content-container {
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: normal;
+    display: inline-block;
+    overflow-wrap: break-word;
+}
+
+.review-content p {
+    margin: 5px 0;
+}

@@ -8,6 +8,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .navbar-nav .form-inline .form-control {
+            width: auto;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .navbar-nav .form-inline .btn {
+            width: auto;
+            display: inline-block;
+        }
+        .flash-message.alert-success {
+            background-color: green;
+            color: white;
+        }
+        .flash-message.alert-danger {
+            background-color: red;
+            color: white;
+        }
+        .flash-message.alert-warning {
+            background-color: orange;
+            color: white;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 150px); /* Adjust height to center the form */
+        }
+        .form-container .form-group {
+            width: 100%;
+            max-width: 300px;
+        }
+        .form-container .btn {
+            width: 100%;
+        }
+        .avatar-img-small {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px; /* Add some space between the avatar and the username */
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -21,23 +66,30 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="alcoholicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle restricted-link" href="#" id="alcoholicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Alcoholic
                         </a>
                         <div class="dropdown-menu" aria-labelledby="alcoholicDropdown">
-                            <a class="dropdown-item" href="/vodka">Vodka</a>
-                            <a class="dropdown-item" href="/whisky">Whisky/Whiskey</a>
-                            <a class="dropdown-item" href="/gin">Gin</a>
-                            <a class="dropdown-item" href="/rum">Rum</a>
-                            <a class="dropdown-item" href="/tequila">Tequila</a>
-                            <a class="dropdown-item" href="/liqueur">Liqueur</a>
-                            <a class="dropdown-item" href="/other">Other</a>
+                            <a class="dropdown-item restricted-link" href="/vodka">Vodka</a>
+                            <a class="dropdown-item restricted-link" href="/whiskey">Whiskey</a>
+                            <a class="dropdown-item restricted-link" href="/gin">Gin</a>
+                            <a class="dropdown-item restricted-link" href="/rum">Rum</a>
+                            <a class="dropdown-item restricted-link" href="/tequila">Tequila</a>
+                            <a class="dropdown-item restricted-link" href="/liqueur">Liqueur</a>
+                            <a class="dropdown-item restricted-link" href="/other">Other</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="/nonalcoholic">Non-alcoholic</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/non_alcoholic">Non-alcoholic</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/leaderboard">Leaderboard</a></li>
+                    <li class="nav-item"><a class="nav-link restricted-link" href="/popular-reviews">Popular Reviews</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <form class="form-inline" action="{{ url_for('routes.search') }}" method="get">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                    </li>
                     <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
                 </ul>
             </div>
@@ -45,11 +97,21 @@
     </header>
 
     <div class="container mt-3">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </div>
     
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 </body>
 </html>

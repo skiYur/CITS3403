@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block head %}
+<style>
+    .avatar-search-result {
+        width: 50px;  /* Adjust width as needed */
+        height: 50px; /* Adjust height as needed */
+        object-fit: cover; /* Ensure the image fits within the square */
+        border-radius: 50%; /* Makes the avatar circular */
+        margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('routes.search') }}">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+
+    <h2 class="mt-4">Search Results for "{{ query }}"</h2>
+    <ul class="list-group mt-3">
+        {% for user in users %}
+            <li class="list-group-item">
+                <a href="{{ url_for('routes.user_profile', username=user.username) }}">
+                    <img src="{{ url_for('static', filename=user.avatar) }}" alt="{{ user.username }}'s avatar" class="avatar-search-result">
+                    {{ user.username }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

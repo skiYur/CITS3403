@@ -1,0 +1,38 @@
+<!-- user_profile.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Banner with Avatar and Username -->
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner" class="banner-img">
+        <div class="avatar-wrapper">
+            <img src="{{ url_for('static', filename=user.avatar or 'images/avatars/default_avatar.png') }}" alt="User Avatar" class="avatar-img" id="avatar-img">
+        </div>
+        <div class="username">{{ user.username }}</div>
+    </div>
+
+    <div class="user-info">
+        <h1>{{ user.username }}'s Profile</h1>
+        <p>Date Joined: <span class="date-joined">{{ user.created_at.strftime('%Y-%m-%d') }}</span></p>
+    </div>
+
+    <!-- Posts Box -->
+    <div class="content-area">
+        <h2>{{ user.username }}'s Posts</h2>
+        <div id="user-posts">
+            {% if user_posts %}
+                {% for post in user_posts %}
+                    <div class="post">
+                        <p>{{ post.content }}</p>
+                        <small>Posted on {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>This user has not made any posts yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

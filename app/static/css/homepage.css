@@ -1,60 +1,145 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Consistent background color */
-}
-
-/* Sidebar styling */
-.sidebar {
-    background-color: #004d4d; /* Teal color for the sidebar */
-    color: white;
-    padding: 15px; /* More refined padding */
+    background-color: #f4f4f4;
 }
 
 .category-list .list-group-item {
     background-color: transparent;
     color: white;
-    padding: 10px 15px; /* More consistent padding */
+    padding: 10px 15px;
     border: none;
     cursor: pointer;
-    border-radius: 5px; /* Rounded corners for modern look */
+    border-radius: 5px;
 }
 
 .category-list .list-group-item:hover {
-    background-color: #006666; /* Slightly different teal on hover for better feedback */
+    background-color: #006666;
 }
 
 /* Main content area styling */
 .content-area {
-    padding: 20px;
-    background-color: #ffffff; /* Ensure background color for content area */
-    border-left: 2px solid #ccc; /* Subtle border to separate from sidebar */
-}
-
-/* Engagement card styling */
-.engagement-card {
+    padding-bottom: 50px;
     background-color: #ffffff;
-    padding: 20px;
-    margin-top: 20px; /* Spacing from top */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Stronger shadow for depth */
+    border-left: 2px solid #ccc;
 }
 
-textarea {
+/* Insights and posts container */
+.insights-posts-container {
+    padding: 50px;
+    display: flex;
+    gap: 50px; /* Space between the two boxes */
+}
+
+/* Insights box styling */
+.insights-box {
+    background-color: #004d4d;
+    color: white;
+    padding: 15px;
+    width: 20%; /* Adjust width as needed */
+    border-radius: 5px;
+}
+
+/* Posts box styling */
+.posts-box {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 15px;
+    width: 80%; /* Adjust width as needed */
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.post-content {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word; /* Ensure long words are wrapped */
+    overflow: hidden; /* Hide overflow content */
+}
+
+.post {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+.star-rating {
+    display: inline-block;
+}
+
+.star-rating .fa-star {
+    color: #FFD700; /* Gold color for stars */
+}
+
+/* Banner and avatar styles */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.banner {
+    position: relative;
     width: 100%;
-    height: 100px; /* Fixed height */
-    resize: none; /* Disable resizing */
-    padding: 10px; /* Inner padding for text area */
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for inset effect */
-    border: 1px solid #ccc; /* Subtle border */
+    height: 200px;
+    overflow: visible;
+    margin-bottom: 20px;
+    background-color: #cccccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
 }
 
-.btn-primary {
+.banner-img {
     width: 100%;
-    padding: 10px 0; /* Adequate padding for better click area */
-    background-color: #007bff; /* Primary blue */
-    border-color: #007bff; /* Match border color */
+    height: 100%;
+    object-fit: cover;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3; /* Darker on hover */
-    border-color: #0056b3; /* Border color darker on hover */
+.avatar-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid white;
+    background-color: #666666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    margin-top: 60px;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.username {
+    position: absolute;
+    left: 130px;
+    bottom: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 20px;
+    z-index: 10;
 }

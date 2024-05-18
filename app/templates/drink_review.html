@@ -2,32 +2,44 @@
 
 {% block title %}Drink Review{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/project.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
 {% block content %}
 <div class="container">
-    <!-- Drink Review Form -->
+    <!-- Add Review Button -->
     <div class="row">
         <div class="col-md-12">
-            <h1>Add a {{ drink_type }} Review</h1>
-            <form id="drink-review-form">
+            <button id="toggle-review-form" class="btn btn-primary mb-4">Add a Review</button>
+        </div>
+    </div>
+
+    <!-- Drink Review Form -->
+    <div class="row" id="review-form-container" style="display: none;">
+        <div class="col-md-12">
+            <h1>Add a {{ drink_type|replace('_', '-')|capitalize }} Review</h1>
+            <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
                     <label for="drink-name">Drink Name:</label>
-                    <input type="text" class="form-control" id="drink-name" name="drinkName" required>
+                    <input type="text" class="form-control form-control-custom" id="drink-name" name="drinkName" required>
                 </div>
                 <div class="form-group">
                     <label for="instructions">Instructions:</label>
-                    <textarea class="form-control" rows="3" id="instructions" name="instructions"></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="instructions" name="instructions"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="ingredients">Ingredients:</label>
-                    <textarea class="form-control" rows="3" id="ingredients" name="ingredients"></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="ingredients" name="ingredients"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="review">Review:</label>
-                    <textarea class="form-control" rows="3" id="review" name="review" required></textarea>
+                    <textarea class="form-control form-control-custom" rows="3" id="review" name="review" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="rating">Rating:</label><br>
-                    <div id="rating-stars">
+                    <div id="rating-stars" class="star-rating">
                         <i class="star far fa-star" data-value="1"></i>
                         <i class="star far fa-star" data-value="2"></i>
                         <i class="star far fa-star" data-value="3"></i>
@@ -36,22 +48,86 @@
                     </div>
                     <input type="hidden" id="rating" name="rating" value="0">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit Review</button>
+                <button type="submit" class="btn btn-primary btn-custom">Submit Review</button>
             </form>
         </div>
     </div>
 
-    <!-- Display Drink Reviews -->
+    <!-- Search Form and Display Drink Reviews -->
     <div class="row mt-4">
         <div class="col-md-12">
-            <h2>Recent Drink Reviews</h2>
+            <h2>Recent {{ drink_type|replace('_', '-')|capitalize }} Drink Reviews</h2>
+            <form id="search-form" class="form-inline mb-3" onsubmit="searchReviews(event)">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Reviews" aria-label="Search" id="search-input" required>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
             <div id="drink-reviews">
-                <!-- Drink reviews will be displayed here -->
+                {% for review in reviews %}
+                <div class="review">
+                    <div class="review-body">
+                        <div class="review-header">
+                            <img src="{{ url_for('static', filename=review.user.avatar) }}" alt="{{ review.user.username }}'s avatar" class="avatar">
+                            <strong>{{ review.user.username }}</strong>
+                        </div>
+                        <div class="review-content-container">
+                            {% set content_parts = review.content.split(",") %}
+                            {% if content_parts|length >= 5 %}
+                                <p><strong>Drink Type:</strong> {{ review.drink_type|replace('_', '-')|capitalize }}</p>
+                                <p><strong>Drink Name:</strong> {{ content_parts[0].split(":")[1].strip() if ":" in content_parts[0] else "N/A" }}</p>
+                                <p><strong>Rating:</strong> 
+                                    <span class="review-rating" data-rating="{{ content_parts[1].split(":")[1].strip() if ":" in content_parts[1] else 0 }}"></span>
+                                </p>
+                                <p><strong>Instructions:</strong> {{ content_parts[2].split(":")[1].strip() if ":" in content_parts[2] else "N/A" }}</p>
+                                <p><strong>Ingredients:</strong> {{ content_parts[3].split(":")[1].strip() if ":" in content_parts[3] else "N/A" }}</p>
+                                <p><strong>Review:</strong> {{ content_parts[4].split(":")[1].strip() if ":" in content_parts[4] else "N/A" }}</p>
+                                <p><strong>Likes:</strong> <span id="like-count-{{ review.id }}">{{ review.likes }}</span></p>
+                                <p><strong>Super Likes:</strong> <span id="super-like-count-{{ review.id }}">{{ review.super_likes }}</span></p>
+                                <p><strong>Dislikes:</strong> <span id="dislike-count-{{ review.id }}">{{ review.dislikes }}</span></p>
+                                {% if review.user_id != session['user_id'] %}
+                                <div class="review-buttons">
+                                    <button class="btn btn-like" onclick="likePost({{ review.id }}, 'like')">
+                                        <i class="fas fa-thumbs-up"></i> Like
+                                    </button>
+                                    <button class="btn btn-super-like" onclick="likePost({{ review.id }}, 'super_like')">
+                                        <i class="fas fa-heart"></i> Super Like
+                                    </button>
+                                    <button class="btn btn-dislike" onclick="likePost({{ review.id }}, 'dislike')">
+                                        <i class="fas fa-thumbs-down"></i> Dislike
+                                    </button>
+                                </div>
+                                {% endif %}
+                            {% else %}
+                                <p>Error: Review content is improperly formatted.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <small class="post-time" data-time="{{ review.created_at.isoformat() }}">Posted on {{ review.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    <small>Review ID: {{ review.id }}</small>
+                    {% if review.user_id == session['user_id'] %}
+                        <button onclick="deleteReview('{{ review.id }}')" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
 
-<!-- JavaScript to handle form submission, display reviews, and star rating -->
 <script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Convert server time to local time
+        const postTimes = document.querySelectorAll('.post-time');
+        postTimes.forEach(function(postTime) {
+            const serverTime = new Date(postTime.getAttribute('data-time') + 'Z');
+            const localTime = serverTime.toLocaleString();
+            postTime.textContent = `Posted on ${localTime}`;
+        });
+    });
+</script>
+<script>
+    const drinkType = "{{ drink_type }}";
+</script>
 {% endblock %}
