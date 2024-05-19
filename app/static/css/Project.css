@@ -177,7 +177,7 @@ p{
 
 /* Content settings */
 .container-fluid {
-    background-color: #004885;
+    /*background-color: #004885; */
     width: 100vw;
     height: calc(100vh - 50px); /* Adjust height assuming nav bar is 50px */
     display: flex;
@@ -414,7 +414,7 @@ input, .btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
+    background-color: #f7f7f7d4;
     padding: 20px;
     text-align: center;
 }
@@ -434,7 +434,7 @@ input, .btn {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: #004d4d;
+    background-color: #004d4d87;
     padding: 20px;
     color: white;
     height: 100%;
@@ -448,4 +448,10 @@ input, .btn {
 .welcome-container + .login-container,
 .welcome-container + .signup-container {
     border-left: 1px solid #ccc;
+}
+#login-form a{
+    color: #ffffff;
+}
+.nxt-form:hover {
+    text-decoration: underline;
 }
