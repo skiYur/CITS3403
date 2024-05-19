@@ -8,54 +8,34 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        .navbar-nav .form-inline .form-control {
-            width: auto;
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .navbar-nav .form-inline .btn {
-            width: auto;
-            display: inline-block;
-        }
-        .flash-message.alert-success {
-            background-color: green;
-            color: white;
-        }
-        .flash-message.alert-danger {
-            background-color: red;
-            color: white;
-        }
-        .flash-message.alert-warning {
-            background-color: orange;
-            color: white;
-        }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 150px); /* Adjust height to center the form */
-        }
-        .form-container .form-group {
-            width: 100%;
-            max-width: 300px;
-        }
-        .form-container .btn {
-            width: 100%;
-        }
-        .avatar-img-small {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px; /* Add some space between the avatar and the username */
-            vertical-align: middle;
-        }
-    </style>
 </head>
 <body>
-    <header>
+    <header class="bg-white-opaque flex justify-between p-header bfront mx-auto" style="max-width:1920px;">
+        <div class="flex justify-center items-center">
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Mix'd Opinions Logo" style="height: 60px;" class="p-nav"/>
+            </a>
+            <!-- implement a dropdown for -->
+            <!-- <a href="/vodka">Vodka</a>
+            <a href="/whiskey">Whiskey</a>
+            <a href="/gin">Gin</a>
+            <a href="/rum">Rum</
+            <a href="/tequila">Tequila</a>
+            <a href="/liqueur">Liqueur</a>
+            <a href="/other">Other</a> -->
+            <a href="/non_alcoholic" class="text-nav p-nav">Non-alcoholic</a>
+            <a href="/leaderboard" class="text-nav p-nav">Leaderboard</a>
+            <a href="/popular-reviews" class="text-nav p-nav">Popular Reviews</a>
+            <a href="/homepage" class="text-nav p-nav">Profile</a>
+        </div>
+        <div class = "flex items-center">
+            <!-- implement the search query tab -->
+            <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required> -->
+            <button class ="button-nav"style="margin-right: 15px;">Search</button>
+            <a class="nav-item"><a class="nav-link" href="/logout"><button class ="button-nav" style="margin-right: 15px;">Logout</button></a>
+        </div>
+    </header>
+    <!-- <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">
                 <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Mix'd Opinion Logo" style="height: 40px;">
@@ -94,20 +74,28 @@
                 </ul>
             </div>
         </nav>
-    </header>
+    </header> -->
 
-    <div class="container mt-3">
+    
+    <div class="z-10">
+    <img src="{{ url_for('static', filename='images/drinks2.png') }}" 
+        alt="Login Page" 
+        class="object-cover absolute" width="100%" style="top: -90px;"/>
+    </div>
+
+    <div align = "center" class="container mt-3 z10">
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             {% for category, message in messages %}
-              <div class="flash-message alert alert-{{ category }}">{{ message }}</div>
+              <div class="flash-message alert alert-{{ category }}" style="
+              background-color: white;">{{ message }}</div>
             {% endfor %}
           {% endif %}
         {% endwith %}
-
-        {% block content %}{% endblock %}
     </div>
+    {% block content %}{% endblock %}
+
     
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

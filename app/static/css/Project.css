@@ -9,11 +9,169 @@ html, body {
     background-color: #a5e1e1; /* Set teal background globally */
 }
 
+h1 {
+    margin: 0;
+}
+p{
+    margin: 0;
+
+}
+.bfront{
+    position: relative;
+    z-index: 10;
+}
+
+.z10{
+    z-index: 10;
+}
+.z-10{
+    z-index: -10}
+
+.absolute{
+    position: absolute;
+}
+
+.relative{
+    position: relative;
+}
+.bg-white-opaque{
+    background-color: rgba(255, 255, 255, 0.842);
+}
+.bg-opaque2{
+    background-color: rgba(8, 152, 196, 0.4);
+}
+.bg-opaque3{
+    background-color: rgba(185, 18, 18, 0.4);
+}
+.div-land{
+    background-color: #03003357;
+}
+.text-nav {
+    color: black;
+    font-weight: bold;
+}
+
+.text-brand{
+    color: #106868;
+
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+.flex{
+    display: flex;
+}
+
+.justify-between{
+    justify-content: space-between;
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+.items-center{
+    align-items:center
+}
+.m-8{
+    margin: 8px;
+}
+.p-8{
+    padding: 8px;
+}
+
+.padding-header{
+    padding: 18px 12px;
+}
+
+.p-nav{
+    padding: 8px 16px;
+}
+
+.button-nav{
+    color: rgb(255, 255, 255);
+    background-color: #106868;
+    border: none;
+    border-radius: 9999px; 
+    padding: 9px 24px
+}
+
+.object-cover{
+    object-fit: cover;
+}
+
+.mx-auto{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-36px{
+    font-size: 36px;
+}
+
+.text-16px{
+    font-size: 16px;
+}
+
+@media (min-width:640px){
+    .sm\:text-60px{
+        font-size: 60px;
+    }
+    .sm\:text-20px{
+        font-size: 20px;
+    }
+}
+
 /* Navigation bar settings */
 .navbar-nav {
     background-color: #FFFF;
 }
 
+.navbar-nav .form-inline .form-control {
+    width: auto;
+    display: inline-block;
+    margin-right: 10px;
+}
+.navbar-nav .form-inline .btn {
+    width: auto;
+    display: inline-block;
+}
+.flash-message.alert-success {
+    background-color: green;
+    color: white;
+}
+.flash-message.alert-danger {
+    background-color: red;
+    color: white;
+}
+.flash-message.alert-warning {
+    background-color: orange;
+    color: white;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px); /* Adjust height to center the form */
+}
+.form-container .form-group {
+    width: 100%;
+    max-width: 300px;
+}
+.form-container .btn {
+    width: 100%;
+}
+.avatar-img-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px; /* Add some space between the avatar and the username */
+    vertical-align: middle;
+}
 
 
 
@@ -107,13 +265,6 @@ input, .btn {
     background-color: orange;
     color: white;
 }
-
-
-
-
-
-
-
 
 /* Review Styles */
 .review {
