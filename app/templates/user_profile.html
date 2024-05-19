@@ -3,10 +3,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div style="background-color: #000000e8; color:white;">
     <!-- Banner with Avatar and Username -->
     <div class="banner">
-        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Banner" class="banner-img">
+        <img src="{{ url_for('static', filename='images/banner3.png') }}" alt="Banner" class="banner-img">
         <div class="avatar-wrapper">
             <img src="{{ url_for('static', filename=user.avatar or 'images/avatars/default_avatar.png') }}" alt="User Avatar" class="avatar-img" id="avatar-img">
         </div>
@@ -14,14 +14,14 @@
     </div>
 
     <div class="user-info">
-        <h1>{{ user.username }}'s Profile</h1>
+        <h1 style="padding-top: 90px;">{{ user.username }}'s Profile</h1>
         <p>Date Joined: <span class="date-joined">{{ user.created_at.strftime('%Y-%m-%d') }}</span></p>
     </div>
 
     <!-- Posts Box -->
     <div class="content-area">
-        <h2>{{ user.username }}'s Posts</h2>
-        <div id="user-posts">
+        <h2 align="center">{{ user.username }}'s Posts</h2>
+        <div id="user-posts" style="color: black;">
             {% if user_posts %}
                 {% for post in user_posts %}
                     <div class="post">
@@ -34,5 +34,6 @@
             {% endif %}
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

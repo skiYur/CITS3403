@@ -8,17 +8,18 @@
 {% endblock %}
 
 {% block content %}
+<div style="background-color: #000000b8; color:white;">
 <div class="container">
     <!-- Add Review Button -->
-    <div class="row">
+    <div align ="center"class="row">
         <div class="col-md-12">
-            <button id="toggle-review-form" class="btn btn-primary mb-4">Add a Review</button>
+            <button id="toggle-review-form" class="button-nav">Add a Review</button>
         </div>
     </div>
 
     <!-- Drink Review Form -->
-    <div class="row" id="review-form-container" style="display: none;">
-        <div class="col-md-12">
+    <div align = "center" class="row" id="review-form-container" style="display: none;">
+        <div class="col-md-4">
             <h1>Add a {{ drink_type|replace('_', '-')|capitalize }} Review</h1>
             <form id="drink-review-form" method="POST" action="{{ url_for('routes.submit_review', drink_type=drink_type) }}">
                 <div class="form-group">
@@ -48,18 +49,18 @@
                     </div>
                     <input type="hidden" id="rating" name="rating" value="0">
                 </div>
-                <button type="submit" class="btn btn-primary btn-custom">Submit Review</button>
+                <button type="submit" class="button-nav">Submit Review</button>
             </form>
         </div>
     </div>
 
     <!-- Search Form and Display Drink Reviews -->
-    <div class="row mt-4">
-        <div class="col-md-12">
+    <div align="center">
+        <div class="col-md-5">
             <h2>Recent {{ drink_type|replace('_', '-')|capitalize }} Drink Reviews</h2>
-            <form id="search-form" class="form-inline mb-3" onsubmit="searchReviews(event)">
+            <form id="search-form" class = "col-md-5"onsubmit="searchReviews(event)">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search Reviews" aria-label="Search" id="search-input" required>
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="button-nav" type="submit">Search</button>
             </form>
             <div id="drink-reviews">
                 {% for review in reviews %}
@@ -114,7 +115,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <script src="{{ url_for('static', filename='js/drink_review.js') }}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
