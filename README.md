@@ -13,6 +13,14 @@ Data Access Layer: Utilizes a relational database management system (such as Pos
 
 # How to use, run and test the application. 
 
+Firstly, run pip install -r requirements.txt
+After, you can run the application by - flask run or run the 'python3 Project.py' command, this will start a development server
+Open it in web browser and the loading/homepage should display. You can signup and use the application. 
+
+Testing the Application:
+Ensure your tests are in a directory (e.g., `/tests`). You can run them using: python -m unittest discover -s tests
+You can perform functional testing by interacting with the application through the browser or using tools like Selenium to automate the browser or loading testing and see
+how it behaves under stress. 
 
 # Members 
 
