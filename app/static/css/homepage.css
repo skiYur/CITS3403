@@ -1,9 +1,13 @@
 body {
     font-family: 'Arial', sans-serif;
+<<<<<<< HEAD
     margin: 0;
     padding: 0;
     background-color: #e4f9f5;
     color: #053742;
+=======
+    background-color: #030033;
+>>>>>>> origin/style
 }
 
 header {

@@ -10,6 +10,14 @@ import os
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
+<<<<<<< HEAD
+=======
+def landing():
+    return render_template('landing.html')
+
+@routes.route('/homepage')
+@login_required
+>>>>>>> origin/style
 def home():
     return render_template('landingpage.html')
 
