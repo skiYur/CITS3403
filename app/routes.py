@@ -10,20 +10,12 @@ import os
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
-<<<<<<< HEAD
-=======
 def landing():
     return render_template('landing.html')
 
 @routes.route('/homepage')
 @login_required
->>>>>>> origin/style
 def home():
-    return render_template('landingpage.html')
-
-@routes.route('/dashboard')
-@login_required
-def dashboard():
     user = User.query.filter_by(username=session.get('username')).first()
     if user:
         user_posts = Post.query.filter_by(user_id=user.id).order_by(Post.created_at.desc()).all()
@@ -38,15 +30,17 @@ def login():
     if request.method == 'POST':
         identifier = request.form.get('email')
         password = request.form.get('password')
+
         user = User.query.filter((User.username == identifier) | (User.email == identifier)).first()
         if user and user.check_password(password):
             session['username'] = user.username
             session['user_id'] = user.id
-            login_user(user)
+            login_user(user)  # Use login_user to log in the user with Flask-Login
             flash('Login successful', category='success')
-            return redirect(url_for('routes.dashboard'))
+            return redirect(url_for('routes.home'))
         else:
             flash('Invalid login credentials', category='danger')
+
     return render_template('login.html')
 
 @routes.route('/logout')
@@ -56,11 +50,17 @@ def logout():
     session.pop('username', None)
     session.pop('user_id', None)
     flash('You have been logged out', category='success')
-    return redirect(url_for('routes.home'))
+    return redirect(url_for('routes.login'))
 
 def is_strong_password(password):
-    """Checks if the provided password is strong."""
-    return len(password) >= 8 and re.search(r'[A-Z]', password) and re.search(r'[!@#$%^&*(),.?":{}|<>]', password)
+    """Check if the password is strong."""
+    if len(password) < 8:
+        return False
+    if not re.search(r'[A-Z]', password):
+        return False
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        return False
+    return True
 
 @routes.route('/register', methods=['GET', 'POST'])
 def sign_up():
@@ -69,22 +69,30 @@ def sign_up():
         email = request.form.get('email')
         password = request.form.get('password1')
         confirm_password = request.form.get('password2')
+
         if password != confirm_password:
             flash('Passwords do not match', category='danger')
             return redirect(url_for('routes.sign_up'))
+
         if not is_strong_password(password):
             flash('Password must be at least 8 characters long, contain an uppercase letter, and a special character.', category='danger')
             return redirect(url_for('routes.sign_up'))
+
         existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
         if existing_user:
-            flash('Username or email already exists', category='danger')
+            if existing_user.username == username:
+                flash('Username already exists', category='danger')
+            if existing_user.email == email:
+                flash('Email already exists', category='danger')
             return redirect(url_for('routes.sign_up'))
+
         user = User(username=username, email=email, created_at=datetime.utcnow(), avatar='images/avatars/default_avatar.png')
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
         flash('Registration successful', category='success')
         return redirect(url_for('routes.login'))
+
     return render_template('sign_up.html')
 
 @routes.route('/api/leaderboard')
@@ -367,4 +375,9 @@ def search_reviews():
 
     return jsonify({'success': True, 'reviews': reviews_data})
 
-
+@routes.route('/api/login_status', methods=['GET'])
+def login_status():
+    if current_user.is_authenticated:
+        return jsonify({"isLoggedIn": True})
+    else:
+        return jsonify({"isLoggedIn": False})

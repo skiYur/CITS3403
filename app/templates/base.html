@@ -3,62 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} - Mix'd Opinion</title>
+    <title>{% block title %}{% endblock %} - Mix'd Opinions</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<<<<<<< HEAD
-    {% if request.endpoint == 'routes.landing_page' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/landingpage.css') }}">
-    {% endif %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
-        .navbar-nav .form-inline .form-control {
-            width: auto;
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .navbar-nav .form-inline .btn {
-            width: auto;
-            display: inline-block;
-        }
-        .flash-message.alert-success {
-            background-color: green;
-            color: white;
-        }
-        .flash-message.alert-danger {
-            background-color: red;
-            color: white;
-        }
-        .flash-message.alert-warning {
-            background-color: orange;
-            color: white;
-        }
-        .form-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: calc(100vh - 150px); /* Adjust height to center the form */
-        }
-        .form-container .form-group {
-            width: 100%;
-            max-width: 300px;
-        }
-        .form-container .btn {
-            width: 100%;
-        }
-        .avatar-img-small {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 10px; /* Add some space between the avatar and the username */
-            vertical-align: middle;
+        .dropdown-menu {
+            display: none;
         }
     </style>
-=======
->>>>>>> origin/style
 </head>
 <body>
     <header class="bg-white-opaque flex justify-between p-header bfront mx-auto" style="max-width:1920px;">
@@ -66,95 +23,59 @@
             <a href="/">
                 <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Mix'd Opinions Logo" style="height: 60px;" class="p-nav"/>
             </a>
-            <!-- implement a dropdown for -->
-            <!-- <a href="/vodka">Vodka</a>
-            <a href="/whiskey">Whiskey</a>
-            <a href="/gin">Gin</a>
-            <a href="/rum">Rum</
-            <a href="/tequila">Tequila</a>
-            <a href="/liqueur">Liqueur</a>
-            <a href="/other">Other</a> -->
+            <div class="dropdown p-nav">
+                <a class="dropdown-toggle text-nav" href="#" id="alcoholicDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Alcoholic
+                </a>
+                <div class="dropdown-menu" aria-labelledby="alcoholicDropdown">
+                  <a class="dropdown-item" href="/vodka">Vodka</a>
+                  <a class="dropdown-item" href="/whiskey">Whiskey</a>
+                  <a class="dropdown-item" href="/gin">Gin</a>
+                  <a class="dropdown-item" href="/rum">Rum</a>
+                  <a class="dropdown-item" href="/tequila">Tequila</a>
+                  <a class="dropdown-item" href="/liqueur">Liqueur</a>
+                  <a class="dropdown-item" href="/other">Other</a>
+                </div>
+            </div>
             <a href="/non_alcoholic" class="text-nav p-nav">Non-alcoholic</a>
             <a href="/leaderboard" class="text-nav p-nav">Leaderboard</a>
             <a href="/popular-reviews" class="text-nav p-nav">Popular Reviews</a>
-            <a href="/homepage" class="text-nav p-nav">Profile</a>
+            <a href="/profile" class="text-nav p-nav">Profile</a>
         </div>
-        <div class = "flex items-center">
-            <!-- implement the search query tab -->
-            <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required> -->
-            <button class ="button-nav"style="margin-right: 15px;">Search</button>
-            <a class="nav-item"><a class="nav-link" href="/logout"><button class ="button-nav" style="margin-right: 15px;">Logout</button></a>
+        <div class="flex items-center">
+            <button class="button-nav" style="margin-right: 15px;">Search</button>
+            <a class="nav-link" href="/logout"><button class="button-nav" style="margin-right: 15px;">Logout</button></a>
         </div>
     </header>
-    <!-- <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="/">
-                <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Mix'd Opinion Logo" style="height: 40px;">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle restricted-link" href="#" id="alcoholicDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Alcoholic
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="alcoholicDropdown">
-                            <a class="dropdown-item restricted-link" href="/vodka">Vodka</a>
-                            <a class="dropdown-item restricted-link" href="/whiskey">Whiskey</a>
-                            <a class="dropdown-item restricted-link" href="/gin">Gin</a>
-                            <a class="dropdown-item restricted-link" href="/rum">Rum</a>
-                            <a class="dropdown-item restricted-link" href="/tequila">Tequila</a>
-                            <a class="dropdown-item restricted-link" href="/liqueur">Liqueur</a>
-                            <a class="dropdown-item restricted-link" href="/other">Other</a>
-                        </div>
-                    </li>
-                    <li class="nav-item"><a class="nav-link restricted-link" href="/non_alcoholic">Non-alcoholic</a></li>
-                    <li class="nav-item"><a class="nav-link restricted-link" href="/leaderboard">Leaderboard</a></li>
-                    <li class="nav-item"><a class="nav-link restricted-link" href="/popular-reviews">Popular Reviews</a></li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <form class="form-inline" action="{{ url_for('routes.search') }}" method="get">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header> -->
-
-    
     <div class="z-10">
-    <img src="{{ url_for('static', filename='images/drinks2.png') }}" 
-        alt="Login Page" 
-        class="object-cover absolute" width="100%" style="top: -90px;"/>
+        <img src="{{ url_for('static', filename='images/drinks2.png') }}" 
+            alt="Login Page" 
+            class="object-cover absolute" width="100%" style="top: -90px;"/>
     </div>
-
-    <div align = "center" class="container mt-3 z10">
-        <!-- Flash Messages -->
+    <div align="center" class="container mt-3 z10">
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
+        {% if messages %}
             {% for category, message in messages %}
-              <div class="flash-message alert alert-{{ category }}" style="
-              background-color: white;">{{ message }}</div>
+            <div class="flash-message alert alert-{{ category }}" style="background-color: white;">{{ message }}</div>
             {% endfor %}
-          {% endif %}
+        {% endif %}
         {% endwith %}
     </div>
-<<<<<<< HEAD
-=======
     {% block content %}{% endblock %}
-
-    
->>>>>>> origin/style
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <div id="flash-message-container"></div>
     <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/landingpage.js') }}"></script>
+    <script>
+    $(document).ready(function() {
+        // Add slideDown animation to Bootstrap dropdown when expanding.
+        $('.dropdown').on('show.bs.dropdown', function() {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideDown(300);
+        });
+
+        // Add slideUp animation to Bootstrap dropdown when collapsing.
+        $('.dropdown').on('hide.bs.dropdown', function() {
+            $(this).find('.dropdown-menu').first().stop(true, true).slideUp(300);
+        });
+    });
+    </script>
 </body>
 </html>
