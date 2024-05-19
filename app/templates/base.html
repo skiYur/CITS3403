@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Project.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    {% if request.endpoint == 'routes.landing_page' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landingpage.css') }}">
+    {% endif %}
     <style>
         .navbar-nav .form-inline .form-control {
             width: auto;
@@ -108,10 +111,10 @@
 
         {% block content %}{% endblock %}
     </div>
-    
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/landingpage.js') }}"></script>
 </body>
 </html>
