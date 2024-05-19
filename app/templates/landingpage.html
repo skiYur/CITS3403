@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mix'd Opinions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landingpage.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <img src="{{ url_for('static', filename='images/drink_logo.png') }}" alt="Mix'd Opinions Logo" class="logo">
+        <nav class="site-nav">
+            <ul>
+                <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                <li><a href="{{ url_for('auth.sign_up') }}">Signup</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section class="hero">
+        <h1>Explore a New Kind of Taste</h1>
+        <p>Discover and share reviews on the best and latest in both alcoholic and non-alcoholic beverages.</p>
+        <img src="{{ url_for('static', filename='images/drinks.png') }}" alt="Diverse Beverages" class="hero-image">
+    </section>
+    <footer class="site-footer">
+        <p>Contact us at <a href="mailto:info@mixdopinions.com">info@mixdopinions.com</a></p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/landingpage.js') }}"></script>
+</body>
+</html>
