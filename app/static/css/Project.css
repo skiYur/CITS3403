@@ -6,7 +6,7 @@ html, body {
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scrolling */
     font-family: Arial, sans-serif;
-    background-color: #a5e1e1; /* Set teal background globally */
+    /*background-color: #a5e1e1; /* Set teal background globally */
 }
 
 h1 {
@@ -232,12 +232,14 @@ input, .btn {
     color: #fff;
     background-color: #dc3545;
     border-color: #dc3545;
+    padding: 5px 24px
 }
 
 .btn-danger:hover {
     color: #fff;
     background-color: #c82333;
     border-color: #bd2130;
+    padding: 5px 24px
 }
 
 
@@ -275,7 +277,7 @@ input, .btn {
 .review-body {
     display: flex;
     flex-direction: column; /* Change flex direction to column */
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 10px;
     flex-wrap: wrap;
 }

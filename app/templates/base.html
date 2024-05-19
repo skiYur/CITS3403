@@ -23,7 +23,7 @@
             <a href="/tequila">Tequila</a>
             <a href="/liqueur">Liqueur</a>
             <a href="/other">Other</a> -->
-            <a href="/non_alcoholic" class="text-nav p-nav">Non-acoholic</a>
+            <a href="/non_alcoholic" class="text-nav p-nav">Non-alcoholic</a>
             <a href="/leaderboard" class="text-nav p-nav">Leaderboard</a>
             <a href="/popular-reviews" class="text-nav p-nav">Popular Reviews</a>
             <a href="/homepage" class="text-nav p-nav">Profile</a>
@@ -31,7 +31,11 @@
         <div class = "flex items-center">
             <!-- implement the search query tab -->
             <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required> -->
-            <button class ="button-nav"style="margin-right: 15px;">Search</button>
+            <form class="form-inline" action="{{ url_for('routes.search') }}" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query" required>
+                <button class ="button-nav"style="margin-right: 15px;" type="submit">Search</button>
+            </form>
+            <!-- <button class ="button-nav"style="margin-right: 15px;">Search</button> -->
             <a class="nav-item"><a class="nav-link" href="/logout"><button class ="button-nav" style="margin-right: 15px;">Logout</button></a>
         </div>
     </header>
@@ -77,10 +81,10 @@
     </header> -->
 
     
-    <div class="z-10">
+    <div class="z-10;">
     <img src="{{ url_for('static', filename='images/drinks2.png') }}" 
         alt="Login Page" 
-        class="object-cover absolute" width="100%" style="top: -90px;"/>
+        class="object-cover absolute" width="100%" style="top: -90px; z-index: -10;"/>
     </div>
 
     <div align = "center" class="container mt-3 z10">

@@ -18,10 +18,10 @@
 <div class="container">
     <form class="form-inline my-2 my-lg-0" method="GET" action="{{ url_for('routes.search') }}">
         <input class="form-control mr-sm-2" type="search" placeholder="Search Users" aria-label="Search" name="query">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="button-nav" type="submit">Search</button>
     </form>
 
-    <h2 class="mt-4">Search Results for "{{ query }}"</h2>
+    <h2 class="mt-4" style="color: white">Search Results for "{{ query }}"</h2>
     <ul class="list-group mt-3">
         {% for user in users %}
             <li class="list-group-item">
