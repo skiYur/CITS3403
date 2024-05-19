@@ -10,10 +10,10 @@ import os
 routes = Blueprint('routes', __name__)
 
 @routes.route('/')
-def home():
-    return render_template('landingpage.html')
+def landing():
+    return render_template('landing.html')
 
-@routes.route('/dashboard')
+@routes.route('/homepage')
 @login_required
 def dashboard():
     user = User.query.filter_by(username=session.get('username')).first()

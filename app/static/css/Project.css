@@ -6,7 +6,122 @@ html, body {
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scrolling */
     font-family: Arial, sans-serif;
-    background-color: #a5e1e1; /* Set teal background globally */
+    /*background-color: #a5e1e1; /* Set teal background globally */
+}
+
+h1 {
+    margin: 0;
+}
+p{
+    margin: 0;
+
+}
+.bfront{
+    position: relative;
+    z-index: 10;
+}
+
+.z10{
+    z-index: 10;
+}
+.z-10{
+    z-index: -10}
+
+.absolute{
+    position: absolute;
+}
+
+.relative{
+    position: relative;
+}
+.bg-white-opaque{
+    background-color: rgba(255, 255, 255, 0.842);
+}
+.bg-opaque2{
+    background-color: rgba(8, 152, 196, 0.4);
+}
+.bg-opaque3{
+    background-color: rgba(185, 18, 18, 0.4);
+}
+.div-land{
+    background-color: #3d02024b ;
+}
+.text-nav {
+    color: black;
+    font-weight: bold;
+}
+
+.text-brand{
+    color: #106868;
+
+}
+
+.text-white {
+    color: rgb(255, 255, 255);
+}
+
+.flex{
+    display: flex;
+}
+
+.justify-between{
+    justify-content: space-between;
+}
+
+.justify-center{
+    justify-content: center;
+}
+
+.items-center{
+    align-items:center
+}
+.m-8{
+    margin: 8px;
+}
+.p-8{
+    padding: 8px;
+}
+
+.padding-header{
+    padding: 18px 12px;
+}
+
+.p-nav{
+    padding: 8px 16px;
+}
+
+.button-nav{
+    color: rgb(255, 255, 255);
+    background-color: #106868;
+    border: none;
+    border-radius: 9999px; 
+    padding: 9px 24px
+}
+
+.object-cover{
+    object-fit: cover;
+}
+
+.mx-auto{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-36px{
+    font-size: 36px;
+}
+
+.text-16px{
+    font-size: 16px;
+}
+
+@media (min-width:640px){
+    .sm\:text-60px{
+        font-size: 60px;
+    }
+    .sm\:text-20px{
+        font-size: 20px;
+    }
 }
 
 /* Navigation bar settings */
@@ -14,12 +129,55 @@ html, body {
     background-color: #FFFF;
 }
 
+.navbar-nav .form-inline .form-control {
+    width: auto;
+    display: inline-block;
+    margin-right: 10px;
+}
+.navbar-nav .form-inline .btn {
+    width: auto;
+    display: inline-block;
+}
+.flash-message.alert-success {
+    background-color: green;
+    color: white;
+}
+.flash-message.alert-danger {
+    background-color: red;
+    color: white;
+}
+.flash-message.alert-warning {
+    background-color: orange;
+    color: white;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px); /* Adjust height to center the form */
+}
+.form-container .form-group {
+    width: 100%;
+    max-width: 300px;
+}
+.form-container .btn {
+    width: 100%;
+}
+.avatar-img-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px; /* Add some space between the avatar and the username */
+    vertical-align: middle;
+}
 
 
 
 /* Content settings */
 .container-fluid {
-    background-color: #004885;
+    /*background-color: #004885; */
     width: 100vw;
     height: calc(100vh - 50px); /* Adjust height assuming nav bar is 50px */
     display: flex;
@@ -74,12 +232,14 @@ input, .btn {
     color: #fff;
     background-color: #dc3545;
     border-color: #dc3545;
+    padding: 5px 24px
 }
 
 .btn-danger:hover {
     color: #fff;
     background-color: #c82333;
     border-color: #bd2130;
+    padding: 5px 24px
 }
 
 
@@ -108,13 +268,6 @@ input, .btn {
     color: white;
 }
 
-
-
-
-
-
-
-
 /* Review Styles */
 .review {
     padding-top: 20px;
@@ -124,7 +277,7 @@ input, .btn {
 .review-body {
     display: flex;
     flex-direction: column; /* Change flex direction to column */
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 10px;
     flex-wrap: wrap;
 }
@@ -261,7 +414,7 @@ input, .btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f7f7f7;
+    background-color: #f7f7f7d4;
     padding: 20px;
     text-align: center;
 }
@@ -281,7 +434,7 @@ input, .btn {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background-color: #004d4d;
+    background-color: #004d4d87;
     padding: 20px;
     color: white;
     height: 100%;
@@ -295,4 +448,10 @@ input, .btn {
 .welcome-container + .login-container,
 .welcome-container + .signup-container {
     border-left: 1px solid #ccc;
+}
+#login-form a{
+    color: #ffffff;
+}
+.nxt-form:hover {
+    text-decoration: underline;
 }
